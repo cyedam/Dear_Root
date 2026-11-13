@@ -7,12 +7,24 @@
 
 /* P1 메인: 투명 배경으로 히어로 위에 겹침 */
 .gnb--overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 30;
   background: transparent;
-  border-bottom: 0;
+  border-bottom: 1px solid transparent;
+  transition: background-color .3s ease, border-color .3s ease;
+}
+
+/* 히어로를 지나면 흰 바탕 */
+.gnb--overlay.gnb--solid {
+  background: var(--white);
+  border-bottom-color: var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnb--overlay { transition: none; }
 }
 
 .gnb__inner {

@@ -13,7 +13,7 @@ import './HeroScene.css'
  * - 바람: 마우스가 지나간 자리에 바람이 남고(0.6~1초 동안 옅어짐), 식물은 잎 끝에 닿은 바람만큼 밑동을 축으로 휘었다가 스프링처럼 돌아옴
  * - 겹: 뒤(약하게 · 느리게) · 중간 · 앞(세게 · 빠르게)
  * - 스크롤: 화면을 3장 높이로 고정해 두고 문구가 차례로 바뀜. 배경은 ①에서 위로, ②에서 아래로 26px
- * - ② 햇빛: 밝게 더하기(screen)로 섞는 큰 빛 + SideRays 빛줄기
+ * - ② 햇빛: 따뜻한 배경 + 흰 큰 빛(밝게 더하기) + SideRays 금빛 빛줄기(밝은 배경 모드)
  * - 크기 · 개수 · 색 등 숫자는 heroConfig.js에서 조절
  */
 
@@ -57,8 +57,9 @@ function HeroScene() {
     let H = 1
     let lastOff = 0
     let lastSun = 0
+    let lastTime = 0
     const draw = (off) => {
-      if (renderer) renderer.draw(plants, off, lastSun)
+      if (renderer) renderer.draw(plants, off, lastSun, lastTime)
       else if (ctx2d) {
         ctx2d.clearRect(0, 0, W, H)
         drawField(ctx2d, plants, bitmaps, off)
@@ -233,6 +234,7 @@ function HeroScene() {
       }
       lastOff = off
       lastSun = s2
+      lastTime = time
       draw(off)
 
       // ① 흙: 아래에서 올라와 식물 밑동을 덮음, ②로 가면 옅어짐
@@ -307,26 +309,34 @@ function HeroScene() {
             '--glow-r': `${SUN.glowRadius * 100}`,
           }}
         />
-        {/* ② 햇빛 — 빛줄기 (밝게 더하기) */}
-        <div ref={raysRef} aria-hidden="true" className="hero-stage__rays">
+        <canvas ref={canvasRef} aria-hidden="true" className="hero-stage__canvas" />
+
+        {/* ② 햇빛 — 빛줄기: 식물 위로 비침 */}
+        <div
+          ref={raysRef}
+          aria-hidden="true"
+          className="hero-stage__rays"
+          style={{ mixBlendMode: SUN.rayLightMode ? 'normal' : 'screen' }}
+        >
           {showRays && (
             <SideRays
               key={raysKey}
               rayColor1={SUN.rayColor}
-              rayColor2={SUN.rayColor}
+              rayColor2={SUN.rayColor2}
+              blend={SUN.rayBlend}
+              lightMode={SUN.rayLightMode}
               origin="top-right"
               speed={2.5}
-              intensity={2}
+              intensity={SUN.rayIntensity}
+              glow={SUN.rayGlow}
+              saturation={SUN.raySaturation}
               spread={2}
               density={SUN.rayDensity}
-              sharpness={0.3}
               opacity={SUN.rayOpacity}
               followMouse={true}
             />
           )}
         </div>
-
-        <canvas ref={canvasRef} aria-hidden="true" className="hero-stage__canvas" />
 
         <div
           ref={soilRef}

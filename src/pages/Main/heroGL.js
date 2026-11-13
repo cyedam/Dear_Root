@@ -4,12 +4,15 @@
 import { SOURCES } from './heroField.js'
 import { LOOK, SUN } from './heroConfig.js'
 
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
+
 const BG = [0xea / 255, 0xf3 / 255, 0xdc / 255] // #EAF3DC
 const SHADOW = [0x1f / 255, 0x2a / 255, 0x22 / 255] // #1F2A22
 
-// 겹별 설정은 heroConfig.js의 LOOK — 0 가운데 큰 잎 · 1 뒤 · 2 중간 · 3 앞
-const LAYER_LOOK = [LOOK.center, LOOK.back, LOOK.mid, LOOK.front]
-const LAYER_TEX = ['center', 'back', 'mid', 'sharp']
+// 겹별 설정은 heroConfig.js의 LOOK — 0 맨 뒤 키 큰 식물 · 1 가운데 큰 잎 · 2 뒤 · 3 중간 · 4 앞
+const LAYER_LOOK = [LOOK.tallBack, LOOK.center, LOOK.back, LOOK.mid, LOOK.front]
+const LAYER_TEX = ['back', 'center', 'back', 'mid', 'sharp']
+const LAYER_COUNT = LAYER_LOOK.length
 
 // 텍스처 흐림 (텍스처 px). 텍스처 높이 512 ≈ 화면에서 식물 높이 약 250~350px 기준
 const TEX_H = 512
@@ -32,6 +35,7 @@ out vec2 vUV;
 out float vV;
 out vec3 vShift;
 out float vFlip;
+out vec2 vScreen; // 화면 위치(px)
 void main() {
   // 흐림이 번질 여백만큼 사각형을 넓힘
   vec2 c = aCorner;
@@ -41,6 +45,7 @@ void main() {
   vec2 rotated = vec2(local.x * co - local.y * s, local.x * s + local.y * co);
   vec2 pos = vec2(aBase.x, aBase.y) + rotated + uOffset;
   gl_Position = vec4(pos.x / uView.x * 2.0 - 1.0, 1.0 - pos.y / uView.y * 2.0, 0.0, 1.0);
+  vScreen = pos;
   float u = c.x * aRotFlip.y + 0.5;
   vUV = vec2(mix(aUV.x, aUV.z, u), mix(aUV.w, aUV.y, c.y));
   vV = (c.y * grow.y) - aPad.y; // 0 = 밑동, 1 = 끝 (식물 기준)
@@ -54,7 +59,18 @@ in vec2 vUV;
 in float vV;
 in vec3 vShift;
 in float vFlip;
+in vec2 vScreen;
 uniform sampler2D uTex;
+uniform vec2 uLightPos;   // 빛이 들어오는 자리(px)
+uniform float uDiag;      // 화면 대각선(px)
+uniform float uTime;
+uniform vec3 uShaftA;     // 빛 색 ① 흰빛
+uniform vec3 uShaftB;     // 빛 색 ② 레몬옐로
+uniform float uShaftMix;
+uniform float uShafts;    // 가닥 수
+uniform float uShaftStrength;
+uniform float uShaftReach;
+uniform float uShaftSpeed;
 uniform vec2 uTexel;     // 텍스처 한 칸 크기
 uniform float uSun;      // 햇빛 장면 진행도 0~1
 uniform float uSunBoost; // 햇빛 장면 식물 밝기
@@ -104,7 +120,21 @@ void main() {
     vec2 toLight = vec2(vFlip, -1.0) * uTexel * 4.0;
     float outside = 1.0 - texture(uTex, vUV + toLight).a;
     float rim = clamp(t.a * outside, 0.0, 1.0);
-    c += vec3(1.0, 0.93, 0.66) * rim * 0.35 * uSun;
+    c += vec3(1.0, 0.97, 0.78) * rim * 0.35 * uSun;
+
+    // 식물 위로 드는 빛줄기: 오른쪽 위에서 비스듬히 내려오는 부드러운 줄기 (식물에만 비침)
+    vec2 d = vScreen - uLightPos;
+    float dist = length(d) / uDiag;
+    float ang = atan(d.y, d.x);
+    float t = uTime * uShaftSpeed;
+    float s1 = 0.5 + 0.5 * sin(ang * uShafts * 6.2832 / 1.6 + t);
+    float s2 = 0.5 + 0.5 * sin(ang * uShafts * 1.7 * 6.2832 / 1.6 - t * 0.7 + 1.3);
+    float shaft = pow(s1, 3.0) * 0.7 + pow(s2, 4.0) * 0.3;
+    float reach = exp(-pow(dist / uShaftReach, 2.0) * 1.6);
+    float light = shaft * reach * uShaftStrength * uSun;
+    // 줄기마다 흰빛 ↔ 레몬옐로가 섞이도록
+    vec3 shaftColor = mix(uShaftA, uShaftB, clamp(uShaftMix + (s2 - 0.5) * 0.6, 0.0, 1.0));
+    c = c + (shaftColor - c * 0.35) * light;
   }
   // 멀수록 배경색에 섞임
   c = mix(c, uBg, uMix);
@@ -263,19 +293,14 @@ export function createRenderer(canvas, bitmaps) {
   gl.bindVertexArray(null)
 
   let data = new Float32Array(0)
-  const ranges = [
-    [0, 0],
-    [0, 0],
-    [0, 0],
-    [0, 0],
-  ]
+  const ranges = Array.from({ length: LAYER_COUNT }, () => [0, 0])
 
   function upload(plants) {
     if (data.length < plants.length * FLOATS) data = new Float32Array(plants.length * FLOATS)
     // plants는 겹 순서로 정렬되어 있음
     let k = 0
     let n = 0
-    for (let li = 0; li < 4; li++) ranges[li] = [0, 0]
+    for (let li = 0; li < LAYER_COUNT; li++) ranges[li] = [0, 0]
     plants.forEach((p) => {
       const uv = atlas.uv[p.name]
       if (!uv) return
@@ -303,6 +328,7 @@ export function createRenderer(canvas, bitmaps) {
   }
 
   let sun = 0
+  let time = 0
   function drawLayer(li, texKey, look, offY, shadow = false) {
     const [first, count] = ranges[li]
     if (!count) return
@@ -324,6 +350,19 @@ export function createRenderer(canvas, bitmaps) {
     gl.uniform2f(u.uTexel, 1 / atlas.W, 1 / atlas.H)
     gl.uniform1f(u.uSun, shadow ? 0 : sun)
     gl.uniform1f(u.uSunBoost, SUN.plantBoost)
+    const vw = canvas.clientWidth
+    const vh = canvas.clientHeight
+    const pl = SUN.plantLight
+    gl.uniform2f(u.uLightPos, SUN.glowCenter[0] * vw, SUN.glowCenter[1] * vh)
+    gl.uniform1f(u.uDiag, Math.hypot(vw, vh))
+    gl.uniform1f(u.uTime, time)
+    gl.uniform3fv(u.uShaftA, hex(pl.colorA))
+    gl.uniform3fv(u.uShaftB, hex(pl.colorB))
+    gl.uniform1f(u.uShaftMix, pl.mix)
+    gl.uniform1f(u.uShafts, pl.shafts)
+    gl.uniform1f(u.uShaftStrength, pl.strength)
+    gl.uniform1f(u.uShaftReach, pl.reach)
+    gl.uniform1f(u.uShaftSpeed, pl.speed)
     // 해당 겹의 인스턴스만 그리기: 속성 시작 위치를 옮김
     gl.bindBuffer(gl.ARRAY_BUFFER, inst)
     const stride = FLOATS * 4
@@ -348,8 +387,9 @@ export function createRenderer(canvas, bitmaps) {
 
   return {
     // sunAmount: 햇빛 장면 진행도 0~1
-    draw(plants, off, sunAmount = 0) {
+    draw(plants, off, sunAmount = 0, seconds = 0) {
       sun = sunAmount
+      time = seconds
       gl.viewport(0, 0, canvas.width, canvas.height)
       gl.clearColor(0, 0, 0, 0)
       gl.clear(gl.COLOR_BUFFER_BIT)
@@ -358,10 +398,11 @@ export function createRenderer(canvas, bitmaps) {
       upload(plants)
       drawLayer(0, LAYER_TEX[0], LAYER_LOOK[0], off)
       drawLayer(1, LAYER_TEX[1], LAYER_LOOK[1], off)
-      drawAir()
       drawLayer(2, LAYER_TEX[2], LAYER_LOOK[2], off)
-      drawLayer(3, 'shadow', LAYER_LOOK[3], off, true)
+      drawAir()
       drawLayer(3, LAYER_TEX[3], LAYER_LOOK[3], off)
+      drawLayer(4, 'shadow', LAYER_LOOK[4], off, true)
+      drawLayer(4, LAYER_TEX[4], LAYER_LOOK[4], off)
     },
     dispose() {
       Object.values(textures).forEach((t) => gl.deleteTexture(t))
