@@ -1,0 +1,56 @@
+{
+  "assetGroups": {
+    "Logos": {
+      "files": {
+        "dear-root-lockup.svg": {
+          "blob": "3c9dbb0b0b626e593dc9e9ba30a115a5",
+          "name": "dear-root-lockup.svg",
+          "size": 8104,
+          "type": "image/svg+xml"
+        },
+        "dear-root-mark.svg": {
+          "blob": "b6e4528872e9a8ea02b8ee7114cc9a5f",
+          "name": "dear-root-mark.svg",
+          "size": 500,
+          "type": "image/svg+xml"
+        },
+        "dear-root-wordmark.svg": {
+          "blob": "47b7cab525c0266de590501775b1c6e4",
+          "name": "dear-root-wordmark.svg",
+          "size": 7615,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "dear-root-lockup.svg",
+        "dear-root-mark.svg",
+        "dear-root-wordmark.svg"
+      ],
+      "tile": "l"
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-11-13T03:08:00Z",
+    "v": 1
+  },
+  "docs": {
+    "sections": []
+  },
+  "groups": [
+    "Logos"
+  ],
+  "lastChange": {
+    "at": "2026-11-13T03:08:00Z",
+    "by": "예린",
+    "note": "P1~P3 디자인과 docs 06·07·97·98을 합쳐 처음 만듦",
+    "via": "Claude (chat)"
+  },
+  "layout": "files",
+  "libraries": [],
+  "namespace": "DearRoot",
+  "sections": {},
+  "title": "Dear Root 디자인 시스템",
+  "v": 3
+}

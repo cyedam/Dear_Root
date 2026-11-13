@@ -1,0 +1,10 @@
+[ 기본 프롬프트 ] 
+A simple, friendly generic houseplant with a few rounded leaves in a simple rounded white pot, one small leaf curling softly into a question-mark shape. Organic flat vector illustration: simple, bold silhouettes built from soft, rounded, slightly irregular hand-drawn shapes, outline-free, with only a few delicate inner lines in a darker shade of the same color. Completely flat, opaque color fills — no gradients, shadows, highlights, textures or 3D. Use 3–6 colors from a fresh lime-white palette: leaf green #2E7D4F, medium green #4C9B6A, fresh green #8CC56E, lime #C6E07A, pale lime #F2F8E6 and white #FFFFFF, with sand soil #CDB394 and deep soil #9C7F5E used only for soil, roots and pot contents. Calm, fresh, modern botanical editorial look, friendly but not childish, cartoonish or vintage. One centered subject, fully visible with generous margins, on a plain solid pale lime #F2F8E6 background. No text or letters. Aspect ratio 1:1.
+
+단순하고 둥근 흰 화분에 둥근 잎 몇 장이 달린 단순하고 다정한 화분 식물, 작은 잎 하나가 부드럽게 말려 물음표 모양을 이룸. 오가닉 플랫 벡터 일러스트: 부드럽고 둥글며 살짝 불규칙한 손그림 같은 형태로 만든 단순하고 또렷한 실루엣, 외곽선 없이 같은 색의 조금 진한 톤으로 가는 안쪽 선만 몇 개. 완전히 평평하고 불투명한 색면 — 그라데이션 · 그림자 · 하이라이트 · 질감 · 3D 없음. 색은 3~6가지만, 산뜻한 라임 화이트 팔레트(리프 그린 #2E7D4F, 미디엄 그린 #4C9B6A, 프레시 그린 #8CC56E, 라임 #C6E07A, 페일 라임 #F2F8E6, 화이트 #FFFFFF)에서 고르고, 샌드 #CDB394와 딥 소일 #9C7F5E는 흙 · 뿌리 · 화분 속 재료에만 씁니다. 차분하고 산뜻한 모던 보태니컬 에디토리얼 느낌, 다정하지만 유치하거나 만화 같거나 빈티지하지 않게. 대상 하나를 가운데에 두고 여백을 넉넉히 해 전체가 보이게, 단색 페일 라임 #F2F8E6 배경. 글자 없음. 비율 1:1.
+
+[ 수정했을 때 작성한 내용 - 1차 ] 
+물음표를 더 크게 잘 보이게 해줘
+
+[ 수정했을 때 작성한 내용 - 2차 ] 
+물음표가 정중앙에 보일 수 있을까?

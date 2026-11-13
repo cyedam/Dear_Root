@@ -1,0 +1,93 @@
+/* Dear Root 디자인 시스템 — tokens.json에서 만든 CSS 변수 */
+@font-face { font-family: 'SchoolSafeVaultingBox'; src: url('fonts/HakgyoansimTtwimteul-R.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Pretendard'; src: url('fonts/Pretendard-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Pretendard'; src: url('fonts/Pretendard-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Pretendard'; src: url('fonts/Pretendard-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Outfit'; src: url('fonts/Outfit-SemiBold-latin.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+:root {
+  --white: #FFFFFF;
+  --pale-lime: #F2F8E6;
+  --hero-lime: #EAF3DC;
+  --sun-tint: #FBFCF4;
+  --leaf-green: #2E7D4F;
+  --leaf-green-hover: #276B43;
+  --leaf-green-deep: #256A42;
+  --lime: #C6E07A;
+  --sand: #CDB394;
+  --soil-ink: #5E4A33;
+  --ink: #1F2A22;
+  --ink-soft: #2F3D33;
+  --ink-muted: #4A574E;
+  --ink-faint: #8A968D;
+  --line: #E4ECD8;
+  --line-strong: #DCE6CF;
+  --placeholder-line: #B9D89A;
+  --placeholder-line-neutral: #B9C7B0;
+  --illust-medium-green: #4C9B6A;
+  --illust-fresh-green: #8CC56E;
+  --illust-soft-leaf: #B9D89A;
+  --illust-deep-soil: #9C7F5E;
+  --illust-sun: #F4D76B;
+  --soil-sangto: #7A5F45;
+  --soil-buyeop: #5C4632;
+  --soil-coco: #B0855C;
+  --soil-jilseok: #D8BE84;
+  --soil-perlite: #F7F5EE;
+  --soil-perlite-edge: #D9D3C4;
+  --soil-masa: var(--sand);
+  --soil-bark: #9C6A42;
+  --soil-huntan: #4A4440;
+  --bag-inner: #F7F9F2;
+  --scene-chip-bg: rgba(255,255,255,0.85);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --section-top: 96px;
+  --section-bottom: 112px;
+  --page-gutter: 120px;
+  --content-width: 1200px;
+  --radius-xs: 4px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+  --shadow-cta: 0 8px 24px rgba(46,125,79,0.22);
+  --shadow-selected: 0 10px 24px rgba(46,125,79,0.18);
+  --shadow-hover: 0 6px 16px rgba(31,42,34,0.08);
+  --shadow-scene: 0 4px 14px rgba(31,42,34,0.08);
+  --shadow-scene-hover: 0 8px 20px rgba(31,42,34,0.14);
+  --shadow-bag: 0 8px 20px rgba(31,42,34,0.10);
+  --control-lg: 56px;
+  --control-md: 48px;
+  --control-sm: 32px;
+  --badge-sm: 28px;
+  --button-width: 260px;
+  --nav-height: 80px;
+  --progress-height: 8px;
+  --font-display: 'SchoolSafeVaultingBox', 'Pretendard', sans-serif;
+  --font-sans: 'Pretendard', system-ui, sans-serif;
+  --font-logo: 'Outfit', sans-serif;
+}
+.display-hero { font-family: var(--font-display); font-size: 60px; line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; }
+.display-1 { font-family: var(--font-display); font-size: 44px; line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; }
+.display-2 { font-family: var(--font-display); font-size: 32px; line-height: 1.3; font-weight: 400; }
+.display-3 { font-family: var(--font-display); font-size: 26px; line-height: 1.4; font-weight: 400; }
+.title-lg { font-family: var(--font-sans); font-size: 24px; line-height: 1.4; font-weight: 600; }
+.title-md { font-family: var(--font-sans); font-size: 20px; line-height: 1.5; font-weight: 600; }
+.title-sm { font-family: var(--font-sans); font-size: 18px; line-height: 1.5; font-weight: 600; }
+.body-lg { font-family: var(--font-sans); font-size: 20px; line-height: 1.7; font-weight: 400; }
+.body { font-family: var(--font-sans); font-size: 18px; line-height: 1.7; font-weight: 400; }
+.body-sm { font-family: var(--font-sans); font-size: 16px; line-height: 1.7; font-weight: 400; }
+.button-lg { font-family: var(--font-sans); font-size: 18px; line-height: 1; font-weight: 500; }
+.button { font-family: var(--font-sans); font-size: 16px; line-height: 1; font-weight: 500; }
+.label { font-family: var(--font-sans); font-size: 14px; line-height: 1.4; font-weight: 600; }
+.caption { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; font-weight: 400; }
+.micro { font-family: var(--font-sans); font-size: 12px; line-height: 1.2; font-weight: 600; }
+.number-lg { font-family: var(--font-sans); font-size: 32px; line-height: 1; font-weight: 600; }
+.wordmark { font-family: var(--font-logo); font-size: 22px; line-height: 1; font-weight: 600; letter-spacing: -0.01em; }

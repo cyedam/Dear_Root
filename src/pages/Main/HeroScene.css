@@ -1,0 +1,149 @@
+/* 화면 3장 높이 동안 장면을 고정해 두고 스크롤로 넘김 */
+.hero-track {
+  position: relative;
+  height: 300vh;
+}
+
+.hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--hero-lime);
+}
+
+.hero-stage__sun-tint {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+/* ② 햇빛 — 큰 빛 · 빛줄기는 밝게 더하기(screen)로 섞음 (덮어 칠하지 않음) */
+.hero-stage__glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  /* 반지름 = 화면 대각선 x 비율 */
+  background: radial-gradient(
+    circle calc(var(--glow-r) / 100 * hypot(100vw, 100vh)) at var(--glow-x) var(--glow-y),
+    #FFFFFF 0%,
+    #FFF8DC 30%,
+    #FFEFA8 60%,
+    rgba(255, 239, 168, 0) 100%
+  );
+}
+
+.hero-stage__rays {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* 맨 뒤 정지된 흐릿한 숲 */
+.hero-stage__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* 식물 밭 (캔버스) */
+.hero-stage__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* ① 흙: 화면 아래에서 식물 밑동을 덮음 */
+.hero-stage__soil {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -80px; /* 장면이 위로 움직여도 아래에 틈이 생기지 않게 */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-stage__soil img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* 문구 — 세 장면 모두 화면 정가운데, 가운데 정렬 */
+.hero-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--page-gutter);
+  text-align: center;
+  pointer-events: none;
+}
+
+.hero-copy--later {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hero-copy__group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+/* 제목 → 설명 24px, 설명 → 버튼 40px */
+.hero-copy__desc {
+  margin-top: 24px;
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  text-shadow: 0 0 12px rgba(255,255,255,0.9);
+}
+
+.hero-copy__desc--lg {
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+.hero-copy__btn {
+  margin-top: 40px;
+}
+
+.hero-copy__title {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* 장면 1: 글 묶음 뒤 흰색 → 투명 타원 (가운데 0.5, 가로 70% · 세로 45%) */
+.hero-copy__group--veil::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 70vw;
+  height: 45vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,255,255,0));
+  pointer-events: none;
+}

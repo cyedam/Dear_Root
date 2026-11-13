@@ -1,0 +1,132 @@
+.products-section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.products-section--single {
+  gap: 32px;
+}
+
+.products-section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.products-section__sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.set-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* ProductCard (세로형) */
+.product-card {
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-card--item {
+  border: 1px solid var(--line);
+}
+
+/* 세트 · 개별 상품 hover: 그림자를 조금 더 진하게 */
+.product-card.card-hover:hover {
+  box-shadow: 0 12px 28px rgba(31,42,34,0.16);
+}
+
+.product-card__media {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  background: var(--sand);
+  overflow: hidden;
+}
+
+.product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card__media--item {
+  background: var(--pale-lime);
+}
+
+.product-card__media--item.is-soil {
+  background: var(--sand);
+}
+
+.product-card__name {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.product-card__name--sm {
+  font-size: 18px;
+}
+
+.product-card__desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.product-card__desc--lg {
+  font-size: 16px;
+}
+
+.product-card__buy {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.product-card__buy--bottom {
+  margin-top: auto;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 12px;
+}
+
+.tabs__tab {
+  height: var(--control-md);
+  padding: 0 24px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--line);
+  background: var(--white);
+  color: var(--ink-muted);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease;
+}
+
+.tabs__tab:active {
+  transform: scale(0.96);
+}
+
+.tabs__tab.is-selected {
+  border-color: var(--leaf-green);
+  background: var(--pale-lime);
+  color: var(--leaf-green);
+  font-weight: 600;
+}

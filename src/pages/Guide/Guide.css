@@ -1,0 +1,340 @@
+/* P4 케어 가이드 — 디자인 시안이 없어 P2 · P3와 같은 토큰 · 컴포넌트 규칙으로 구성 */
+
+.guide-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 64px;
+}
+
+.guide-intro__sub,
+.guide-section-head__sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.guide-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 펼침 · 접힘 버튼 */
+.toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--control-md);
+  padding: 0 24px;
+  border: 1.5px solid var(--leaf-green);
+  border-radius: var(--radius-pill);
+  background: var(--white);
+  color: var(--leaf-green);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.toggle-btn:hover {
+  background: var(--pale-lime);
+}
+
+.toggle-btn:active {
+  transform: scale(0.98);
+}
+
+.toggle-btn--sm {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.chevron {
+  transition: transform .2s ease;
+}
+
+.chevron.is-open {
+  transform: rotate(180deg);
+}
+
+/* P4-S2 ~ S4 — 물 주기 : 햇빛 : 분갈이 = 1 : 1 : 1 가로 배치, 각 칸은 세로 */
+.guide-topics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* 세 카드의 줄(이미지 · 글 · 펼침)을 맞춰서 높이와 버튼 위치를 같게 */
+.guide-topic {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: 24px;
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  background: var(--white);
+}
+
+/* 가이드 일러스트는 4:3 원본 비율 그대로 보이게 */
+.guide-topic__media {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.guide-topic__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.guide-topic__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.guide-topic__text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.guide-topic__more {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* 식물 종류별 요령 — 칸 안에서 세로로 */
+.type-grid {
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.type-card {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.type-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.type-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+/* P4-S5 벌레 대처 */
+.guide-bugs {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 벌레 7종 — 2단 */
+.bug-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.bug-item {
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.bug-item__media {
+  flex: 0 0 120px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.bug-item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bug-item__body {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.bug-item__body .toggle-btn {
+  margin-top: 8px;
+}
+
+.bug-item__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bug-item__title h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.bug-item__look {
+  font-size: 16px;
+  color: var(--ink-muted);
+}
+
+.bug-item__action {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.bug-item__detail {
+  align-self: stretch;
+  margin: 8px 0 0;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bug-item__detail div {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.bug-item__detail dt {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--leaf-green);
+  line-height: 1.7;
+}
+
+.bug-item__detail dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* P4-S6 Q&A */
+.guide-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.faq-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  border-radius: var(--radius-xl);
+  background: var(--white);
+}
+
+.faq-item__q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 32px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.faq-item__q .chevron {
+  flex-shrink: 0;
+  color: var(--leaf-green);
+}
+
+.faq-item__a {
+  padding: 0 32px 24px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.placeholder-chip {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px dashed var(--placeholder-line-neutral);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.faq-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.faq-form__input {
+  width: 100%;
+  padding: 20px 24px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.faq-form__input::placeholder {
+  color: var(--ink-muted);
+}
+
+.faq-form__input:focus {
+  outline: none;
+  border-color: var(--leaf-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle-btn,
+  .chevron { transition: none; }
+}

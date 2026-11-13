@@ -1,0 +1,52 @@
+.gnb {
+  position: relative;
+  z-index: 10;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+/* P1 메인: 투명 배경으로 히어로 위에 겹침 */
+.gnb--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom: 0;
+}
+
+.gnb__inner {
+  height: var(--nav-height);
+  padding: 0 var(--page-gutter);
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  align-items: center;
+}
+
+.gnb__logo {
+  justify-self: start;
+}
+
+.gnb__menu {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.gnb__link {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.gnb__link:hover,
+.gnb__link.is-active {
+  color: var(--leaf-green);
+}
+
+.gnb__link.is-active {
+  font-weight: 600;
+}

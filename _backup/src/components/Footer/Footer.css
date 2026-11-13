@@ -1,0 +1,8 @@
+.footer { position: relative; z-index: 1; background: var(--white); border-top: 1px solid var(--line); padding: 48px var(--page-gutter) 40px; }
+.footer__top { display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+.footer__logo { display: inline-flex; align-items: center; gap: 10px; }
+.footer__desc { margin-top: 16px; font-size: 16px; color: var(--ink-muted); }
+.footer__menu { display: flex; gap: 32px; font-size: 16px; font-weight: 500; }
+.footer__bottom { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-muted); gap: 16px; flex-wrap: wrap; }
+.footer__todo { border: 1px dashed var(--placeholder-line-neutral); border-radius: 8px; padding: 4px 10px; }
+@media (max-width: 900px) { .footer { padding: 40px 20px; } }

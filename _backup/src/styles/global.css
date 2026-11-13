@@ -1,0 +1,13 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--white); color: var(--ink); font-family: var(--font-sans); word-break: keep-all; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: var(--control-lg); min-width: var(--button-width); padding: 0 28px; border-radius: var(--radius-pill); font-family: var(--font-sans); font-size: 18px; font-weight: 500; line-height: 1; border: 0; cursor: pointer; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--leaf-green); color: var(--white); box-shadow: var(--shadow-cta); }
+.btn--primary:hover { background: var(--leaf-green-hover); }
+.btn--scene { background: var(--white); color: var(--ink); font-size: 16px; border: 1px solid rgba(31,42,34,.12); box-shadow: var(--shadow-scene); }
+.btn--scene:hover { transform: translateY(-2px); box-shadow: var(--shadow-scene-hover); }
+.btn--scene:active { transform: scale(.98); }
+.btn:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }

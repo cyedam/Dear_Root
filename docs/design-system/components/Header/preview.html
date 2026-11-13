@@ -1,0 +1,37 @@
+<!-- @dsCard group="Layout" height=110 -->
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--font-sans);word-break:keep-all}
+.wrap{padding:24px;display:flex;flex-direction:column;gap:20px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.cap{font-size:12px;color:var(--ink-muted);font-weight:500}
+.dr-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-pill);font-family:inherit;cursor:pointer;text-decoration:none;transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease,opacity .2s ease}
+.dr-btn:active:not(:disabled){transform:scale(0.98)}
+.dr-btn:disabled{cursor:default;opacity:.4;box-shadow:none}
+.btn-primary{height:var(--control-lg);width:var(--button-width);border:0;background:var(--leaf-green);color:var(--white);font-size:18px;font-weight:500;box-shadow:var(--shadow-cta)}
+.btn-primary:hover:not(:disabled){background:var(--leaf-green-hover)}
+.btn-secondary{height:var(--control-lg);width:var(--button-width);border:1.5px solid var(--leaf-green);background:var(--white);color:var(--leaf-green);font-size:16px;font-weight:500}
+.btn-secondary:hover:not(:disabled){background:var(--pale-lime)}
+.btn-scene{height:var(--control-lg);width:var(--button-width);border:1px solid rgba(31,42,34,0.14);background:var(--white);color:var(--ink);font-size:16px;font-weight:500;box-shadow:var(--shadow-scene)}
+.btn-scene:hover{transform:translateY(-2px);box-shadow:var(--shadow-scene-hover)}
+.badge{display:inline-flex;align-items:center;height:var(--control-sm);padding:0 16px;border-radius:var(--radius-pill);font-size:14px;font-weight:600}
+.badge.sm{height:var(--badge-sm);padding:0 12px}
+.badge-lime{background:var(--lime);color:var(--leaf-green)}
+.badge-sand{background:var(--sand);color:var(--soil-ink)}
+.ph{display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg);background:var(--pale-lime);border:1px dashed var(--placeholder-line);font-size:14px;color:var(--ink-muted)}
+.ph-sand{display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg);background:var(--sand);font-size:14px;color:var(--soil-ink)}
+.dr-card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.dr-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.dsp{font-family:var(--font-display);font-weight:400;margin:0}
+h3,p{margin:0}
+@media (prefers-reduced-motion: reduce){.dr-btn,.dr-card{transition:none}}
+</style></head><body>
+<header style="background:var(--white);border-bottom:1px solid var(--line)"><nav aria-label="주 메뉴" style="height:var(--nav-height);padding:0 40px;display:grid;grid-template-columns:200px 1fr 200px;align-items:center">
+<a href="#" aria-label="Dear Root 메인으로" style="justify-self:start;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="17" fill="var(--leaf-green)"/><path d="M17 17 C 17 12, 13 9, 9 9 C 9 13, 12 16.5, 17 17 Z" fill="var(--lime)"/><path d="M17 15 C 17 10, 20.5 7, 25 7 C 25 11.5, 21.5 14.5, 17 15 Z" fill="var(--white)"/><path d="M17 15 L17 20 M17 20 C 15.5 22.5, 13 24, 11 25 M17 20 L17 27 M17 20 C 18.5 22.5, 21 24, 23 25" stroke="var(--sand)" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg><span class="wordmark" style="font-family:var(--font-logo);font-weight:600;font-size:22px;letter-spacing:-0.01em">Dear Root</span></a>
+<div style="justify-self:center;display:flex;align-items:center;gap:48px;font-size:16px;font-weight:500">
+<a href="#" aria-current="page" style="color:var(--leaf-green);text-decoration:none;font-weight:600">맞춤 케어 체험</a>
+<a href="#" style="color:var(--ink);text-decoration:none">케어 제품</a>
+<a href="#" style="color:var(--ink);text-decoration:none">케어 가이드</a>
+</div><div aria-hidden="true"></div></nav></header>
+</body></html>

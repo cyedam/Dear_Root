@@ -1,0 +1,431 @@
+/* ===== 질문 화면 P2-S1 ~ S3 ===== */
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* P2-S1 진행 표시 (QuizProgress) */
+.quiz-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quiz-progress__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quiz-progress__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  font-size: 16px;
+}
+
+.quiz-progress__step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.quiz-progress__step.is-current {
+  color: var(--leaf-green);
+  font-weight: 600;
+}
+
+.quiz-progress__dot {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: var(--pale-lime);
+  color: var(--ink-muted);
+  transition: background-color .3s, color .3s;
+}
+
+.is-current .quiz-progress__dot {
+  background: var(--leaf-green);
+  color: var(--white);
+}
+
+.is-done .quiz-progress__dot {
+  background: var(--lime);
+  color: var(--leaf-green);
+}
+
+.quiz-progress__count {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--leaf-green);
+}
+
+.quiz-progress__track {
+  height: var(--progress-height);
+  border-radius: var(--radius-pill);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.quiz-progress__bar {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--lime);
+  transition: width .45s var(--ease-out);
+}
+
+/* P2-S2 질문 카드 */
+.quiz-question {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.quiz-question__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.quiz-question__sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* ChoiceCard — 체크 표시 없이 카드 자체가 선택 상태가 됨 */
+.choice-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--line);
+  background: var(--white);
+  text-align: left;
+  cursor: pointer;
+}
+
+.choice-card:active {
+  transform: scale(0.98);
+}
+
+.choice-card.is-selected {
+  border-color: var(--leaf-green);
+  box-shadow: var(--shadow-selected);
+}
+
+.choice-card__media {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.choice-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.choice-card__name {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.choice-card__desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+/* P2-S3 질문 이동 — 화면 양옆 세로 가운데에 고정 (좌우 여백 120px 안에 놓임) */
+.quiz-nav__btn {
+  position: fixed;
+  top: 50%;
+  z-index: 20;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.quiz-nav__btn--prev {
+  left: 28px;
+}
+
+.quiz-nav__btn--next {
+  right: 28px;
+}
+
+.quiz-nav__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.quiz-nav__btn--prev .quiz-nav__circle {
+  border: 1.5px solid var(--leaf-green);
+  background: var(--white);
+  color: var(--leaf-green);
+  box-shadow: var(--shadow-scene);
+}
+
+.quiz-nav__btn--next .quiz-nav__circle {
+  background: var(--leaf-green);
+  color: var(--white);
+  box-shadow: var(--shadow-cta);
+}
+
+.quiz-nav__btn--prev:hover:not(:disabled) .quiz-nav__circle {
+  background: var(--pale-lime);
+}
+
+.quiz-nav__btn--next:hover:not(:disabled) .quiz-nav__circle {
+  background: var(--leaf-green-hover);
+}
+
+.quiz-nav__btn:active:not(:disabled) .quiz-nav__circle {
+  transform: scale(0.96);
+}
+
+.quiz-nav__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--leaf-green);
+  white-space: nowrap;
+}
+
+.quiz-nav__btn:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.quiz-nav__btn:disabled .quiz-nav__circle {
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-nav__circle { transition: none; }
+}
+
+/* ===== 결과 화면 P2-S4 ~ S7 ===== */
+
+/* P2-S4 결과 요약 (ResultSummary) */
+.result-summary {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+
+.result-summary__media {
+  flex: 0 0 480px;
+  height: 440px;
+  border-radius: var(--radius-xl);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.result-summary__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.result-summary__body {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.result-summary__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.result-summary__desc {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.result-summary__action {
+  align-self: stretch;
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-summary__action h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--leaf-green);
+}
+
+.result-summary__action p {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.result-summary__emphasis {
+  font-size: 20px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: var(--leaf-green);
+}
+
+.result-summary__note {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+/* P2-S5 다른 원인 · 벌레 대처 (CauseItem) */
+.result-others {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.result-others__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cause-item {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+}
+
+.cause-item__media {
+  flex: 0 0 96px;
+  height: 96px;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.cause-item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cause-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cause-item__body h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.cause-item__body p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+/* P2-S6 추천 케어 (ProductCard 가로형) */
+.result-products {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.result-products__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.rec-card {
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.rec-card__media {
+  flex: 0 0 200px;
+  height: 200px;
+  border-radius: var(--radius-lg);
+  background: var(--sand);
+  overflow: hidden;
+}
+
+.rec-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rec-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.rec-card__body h3 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.rec-card__body p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.result-products__actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}

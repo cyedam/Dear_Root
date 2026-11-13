@@ -1,0 +1,3 @@
+.placeholder-page { min-height: calc(100vh - var(--nav-height) - 220px); max-width: var(--content-width); margin: 0 auto; padding: var(--section-top) 20px var(--section-bottom); display: flex; flex-direction: column; gap: 24px; }
+.placeholder-page .body { color: var(--ink-soft); }
+.placeholder-page__note { align-self: flex-start; font-size: 14px; color: var(--ink-muted); border: 1px dashed var(--placeholder-line); border-radius: 8px; padding: 6px 12px; background: var(--pale-lime); }

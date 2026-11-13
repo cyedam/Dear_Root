@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dear Root 히어로 인터랙션 시연</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;600&display=swap">
+<style>
+  :root{--leaf:#2E7D4F;--ink:#1F2A22;--ink-soft:#2F3D33;--hero:#EAF3DC;--pale:#F2F8E6}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--hero);color:var(--ink);font-family:'Noto Sans KR',sans-serif;word-break:keep-all}
+  #track{position:relative;height:300vh}
+  #stage{position:sticky;top:0;height:100vh;overflow:hidden}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  header{position:absolute;top:0;left:0;right:0;height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,8vw,120px);z-index:5}
+  header img{height:44px;display:block}
+  nav{display:flex;gap:48px;font-weight:500;font-size:16px}
+  nav span{color:var(--ink)}
+  nav span.on{color:var(--leaf);font-weight:600}
+  .copy{position:absolute;z-index:4;transition:opacity .5s cubic-bezier(.2,.8,.2,1),transform .5s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+  .copy *{pointer-events:auto}
+  .copy h1,.copy h2{font-family:'Gowun Batang',serif;font-weight:700;letter-spacing:-0.01em;line-height:1.3}
+  #c1{left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:200px 20px 96px}
+  #c1 h1{font-size:clamp(36px,4.2vw,60px)}
+  #c1 .bottom{display:flex;flex-direction:column;align-items:center;gap:24px}
+  #c1 p{font-size:20px;line-height:1.7;color:var(--ink-soft);background:rgba(234,243,220,.72);padding:4px 14px;border-radius:12px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;height:56px;min-width:260px;padding:0 28px;border-radius:999px;font:500 18px 'Noto Sans KR',sans-serif;border:0;cursor:pointer;transition:transform .2s ease,background .2s ease}
+  .btn:active{transform:scale(.98)}
+  .primary{background:var(--leaf);color:#fff;box-shadow:0 8px 24px rgba(46,125,79,.22)}
+  .primary:hover{background:#276B43}
+  .scene-btn{background:#fff;color:var(--ink);border:1px solid rgba(31,42,34,.12);box-shadow:0 4px 14px rgba(31,42,34,.08)}
+  .side{left:clamp(20px,8vw,120px);top:50%;transform:translateY(-50%);max-width:460px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+  .side h2{font-size:clamp(32px,3.2vw,44px)}
+  .side p{font-size:18px;line-height:1.7;color:var(--ink-soft);background:rgba(255,255,255,.6);padding:6px 12px;border-radius:12px;margin-bottom:24px}
+  #panel{position:fixed;right:16px;bottom:16px;z-index:10;background:rgba(255,255,255,.92);border:1px solid #E4ECD8;border-radius:16px;padding:12px 14px;font-size:13px;width:236px;box-shadow:0 6px 16px rgba(31,42,34,.08)}
+  #panel b{display:block;font-weight:600;margin-bottom:6px}
+  #panel label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0;color:#4A574E}
+  #panel input{width:110px;accent-color:var(--leaf)}
+  #panel .hint{color:#4A574E;line-height:1.5;margin-top:6px}
+  #panel button{font:inherit;background:none;border:0;color:var(--leaf);cursor:pointer;padding:0;margin-top:4px}
+  .scroll-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);font-size:13px;color:#4A574E;z-index:4}
+</style>
+</head>
+<body>
+<div id="track">
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <header>
+      <img src="../../assets/dear-root-logo.svg" alt="Dear Root">
+      <nav><span class="on">맞춤 케어 체험</span><span>케어 제품</span><span>케어 가이드</span></nav>
+      <span style="width:44px"></span>
+    </header>
+
+    <div class="copy" id="c1">
+      <h1>잎이 보내는 신호를 읽고<br>뿌리부터 다시 돌봐요</h1>
+      <div class="bottom">
+        <p>식물이 왜 시드는지 몰라도 괜찮아요.<br>몇 가지 질문에 답하면 내 식물에 맞는 케어를 같이 찾아 드릴게요.</p>
+        <button class="btn primary">맞춤 케어 체험 시작</button>
+      </div>
+    </div>
+    <div class="copy side" id="c2" style="opacity:0">
+      <h2>케어 제품</h2>
+      <p>내 식물에 맞는 흙과 영양제를 고르거나,<br>재료를 직접 섞어 나만의 흙을 만들어 보세요.</p>
+      <button class="btn scene-btn">케어 제품 바로가기 →</button>
+    </div>
+    <div class="copy side" id="c3" style="opacity:0">
+      <h2>케어 가이드</h2>
+      <p>물 주기, 햇빛, 분갈이, 벌레 대처까지.<br>처음 키우는 분도 따라 하기 쉽게 정리했어요.</p>
+      <button class="btn scene-btn">케어 가이드 보기 →</button>
+    </div>
+    <div class="scroll-hint" id="hint">마우스를 움직여 보고, 아래로 스크롤해 보세요</div>
+  </div>
+</div>
+
+<div id="panel">
+  <b>조절값 (시연용)</b>
+  <label>바람 세기 <input id="kStrength" type="range" min="0" max="2" step="0.05" value="1"></label>
+  <label>바람 범위 <input id="kRadius" type="range" min="0.4" max="2" step="0.05" value="1"></label>
+  <label>자국 남는 시간 <input id="kDecay" type="range" min="0.3" max="2" step="0.05" value="1"></label>
+  <label>배경 이동(px) <input id="kShift" type="range" min="0" max="60" step="1" value="26"></label>
+  <div class="hint" id="state">장면 1 · 히어로</div>
+  <button id="reset">기본값으로</button>
+</div>
+
+<script>
+(() => {
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const touch = matchMedia('(pointer: coarse)').matches;
+  const C = {deep:'#2E7D4F', mid:'#4C9B6A', fresh:'#8CC56E', lime:'#C6E07A', soft:'#B9D89A', soil:'#CDB394', soilDeep:'#9C7F5E', sun:'#F4D76B'};
+  let W=0,H=0,DPR=1;
+
+  // ---------- wind map: low-res grid of velocity, painted by the cursor, fading over time
+  const GX=64, GY=40;
+  const windX=new Float32Array(GX*GY), windY=new Float32Array(GX*GY);
+
+  // ---------- plants
+  const LAYERS=[
+    {depth:0, count:0.55, scale:[0.55,0.85], alpha:0.55, gain:0.4, lag:0.06, tint:0.35},
+    {depth:1, count:0.75, scale:[0.8,1.1],  alpha:0.85, gain:0.7, lag:0.09, tint:0.15},
+    {depth:2, count:0.55, scale:[1.05,1.5], alpha:1,    gain:1.0, lag:0.12, tint:0}
+  ];
+  const KINDS=['fern','broad','grass','round','tall'];
+  let plants=[];
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+  function build(){
+    plants=[];
+    const base = Math.max(40, Math.round(W/11));
+    LAYERS.forEach(L=>{
+      const n=Math.round(base*L.count*(W>900?1:0.7));
+      for(let i=0;i<n;i++){
+        const x=rnd(-40,W+40);
+        // keep the centre (title + button) sparser on the front layers
+        const cx=Math.abs(x-W/2)/(W/2);
+        if(L.depth>0 && cx<0.28 && Math.random()<0.7) continue;
+        const s=rnd(L.scale[0],L.scale[1])*(H/900);
+        const baseY=H*0.86 + rnd(-0.06,0.05)*H + (2-L.depth)*-0.03*H;
+        // keep title / side copy readable: cap how high front plants reach
+        let tipMin=H*0.3;
+        if(L.depth>0){ if(x<W*0.38) tipMin=H*0.6; else if(Math.abs(x-W/2)<W*0.3) tipMin=H*0.48; }
+        const h=Math.min(rnd(170,330)*s, baseY-tipMin);
+        plants.push({
+          L, kind:pick(KINDS), x,
+          baseY, h, s,
+          col:pick([C.deep,C.mid,C.fresh,C.lime,C.soft]),
+          col2:pick([C.deep,C.mid,C.fresh]),
+          flip:Math.random()<0.5?-1:1,
+          phase:rnd(0,Math.PI*2),
+          bend:0, vel:0,
+          leaves:Math.floor(rnd(4,9))
+        });
+      }
+    });
+    plants.sort((a,b)=>a.L.depth-b.L.depth);
+  }
+
+  function resize(){
+    DPR=Math.min(2,window.devicePixelRatio||1);
+    W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*DPR; cv.height=H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    build();
+  }
+  addEventListener('resize',resize);
+
+  // ---------- cursor follower chain (Codrops idea): p0 follows mouse, p1 follows p0 with smoothed velocity
+  const mouse={x:-9999,y:-9999,in:false};
+  const p0={x:0,y:0}, p1={x:0,y:0}, v1={x:0,y:0};
+  addEventListener('pointermove',e=>{
+    if(e.pointerType==='touch') return;
+    if(!mouse.in){ p0.x=p1.x=e.clientX; p0.y=p1.y=e.clientY; }
+    mouse.x=e.clientX; mouse.y=e.clientY; mouse.in=true;
+  });
+  document.addEventListener('pointerleave',()=>{mouse.in=false});
+
+  const K={strength:1,radius:1,decay:1,shift:26};
+  const bind=(id,key)=>{const el=document.getElementById(id);el.addEventListener('input',()=>K[key]=+el.value);};
+  bind('kStrength','strength');bind('kRadius','radius');bind('kDecay','decay');bind('kShift','shift');
+  document.getElementById('reset').onclick=()=>{
+    Object.assign(K,{strength:1,radius:1,decay:1,shift:26});
+    [['kStrength',1],['kRadius',1],['kDecay',1],['kShift',26]].forEach(([i,v])=>document.getElementById(i).value=v);
+  };
+
+  function paintWind(windAmt){
+    // move the chain
+    p0.x+=(mouse.x-p0.x)*0.12; p0.y+=(mouse.y-p0.y)*0.12;
+    v1.x+=((p0.x-p1.x)-v1.x)*0.05*4; v1.y+=((p0.y-p1.y)-v1.y)*0.05*4;
+    p1.x+=v1.x*0.25; p1.y+=v1.y*0.25;
+    // stamp along the segment p1 -> p0 (no gaps when moving fast)
+    const dx=p0.x-p1.x, dy=p0.y-p1.y, len=Math.hypot(dx,dy);
+    if(mouse.in && len>0.5 && windAmt>0.01){
+      const steps=Math.min(24,Math.ceil(len/12));
+      const r=0.08*W*K.radius;
+      const gr=Math.max(1.5, r/W*GX);
+      const fx=dx/len, fy=dy/len, speed=Math.min(1,len/90);
+      for(let s=0;s<=steps;s++){
+        const t=s/steps, px=(p1.x+dx*t)/W*GX, py=(p1.y+dy*t)/H*GY;
+        const x0=Math.max(0,Math.floor(px-gr*2)), x1=Math.min(GX-1,Math.ceil(px+gr*2));
+        const y0=Math.max(0,Math.floor(py-gr*2)), y1=Math.min(GY-1,Math.ceil(py+gr*2));
+        for(let gy=y0;gy<=y1;gy++)for(let gx=x0;gx<=x1;gx++){
+          const d2=((gx-px)**2+(gy-py)**2)/(gr*gr);
+          const w=Math.exp(-d2)*speed*0.35*windAmt/steps*6;
+          const i=gy*GX+gx;
+          windX[i]+=fx*w; windY[i]+=fy*w;
+        }
+      }
+    }
+    // fade (≈0.6–1s), clamp
+    const keep=Math.pow(0.5, (1/60)/(0.28*K.decay));
+    for(let i=0;i<windX.length;i++){
+      windX[i]=Math.max(-1.6,Math.min(1.6,windX[i]*keep));
+      windY[i]*=keep;
+    }
+  }
+  function sample(x,y){
+    const gx=Math.max(0,Math.min(GX-1,Math.round(x/W*GX))), gy=Math.max(0,Math.min(GY-1,Math.round(y/H*GY)));
+    return windX[gy*GX+gx];
+  }
+
+  // ---------- drawing one plant, bent by angle `b` (radians) growing toward the tip
+  function leafShape(len,wid){
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.bezierCurveTo(wid*0.9,-len*0.25, wid*0.7,-len*0.8, 0,-len);
+    ctx.bezierCurveTo(-wid*0.7,-len*0.8,-wid*0.9,-len*0.25,0,0);
+    ctx.fill();
+  }
+  function stemPoint(p,t,b){
+    // quadratic-ish bend: offset grows with t^1.6
+    const k=Math.pow(t,1.6);
+    return {x:p.x+Math.sin(b)*p.h*k*0.9, y:p.baseY-p.h*t*(1-0.18*Math.abs(Math.sin(b))*k), a:b*1.6*t};
+  }
+  function drawPlant(p,b){
+    ctx.globalAlpha=p.L.alpha;
+    const tip=stemPoint(p,1,b);
+    if(p.kind==='grass'){
+      ctx.fillStyle=p.col;
+      for(let j=0;j<6;j++){
+        const off=(j-2.5)*7*p.s, bb=b*(0.7+j*0.08)+(j-2.5)*0.12*p.flip;
+        ctx.save(); ctx.translate(p.x+off,p.baseY); ctx.rotate(bb); leafShape(p.h*(0.55+((j*37)%10)/25),7*p.s); ctx.restore();
+      }
+      return;
+    }
+    // stem
+    ctx.strokeStyle=p.col2; ctx.lineWidth=Math.max(1.5,3*p.s); ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(p.x,p.baseY);
+    for(let t=0.1;t<=1.001;t+=0.1){const q=stemPoint(p,t,b); ctx.lineTo(q.x,q.y);} ctx.stroke();
+    ctx.fillStyle=p.col;
+    if(p.kind==='fern'){
+      for(let t=0.25;t<0.98;t+=0.075){
+        const q=stemPoint(p,t,b), L=(1-t)*48*p.s+10*p.s;
+        [-1,1].forEach(sd=>{ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a+sd*1.15);leafShape(L,L*0.32);ctx.restore();});
+      }
+      ctx.save();ctx.translate(tip.x,tip.y);ctx.rotate(tip.a);leafShape(18*p.s,6*p.s);ctx.restore();
+    }else if(p.kind==='broad'){
+      for(let j=0;j<3;j++){
+        const t=0.55+j*0.2, q=stemPoint(p,t,b), sd=(j%2?1:-1)*p.flip;
+        ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a+sd*0.75);leafShape(70*p.s,36*p.s);ctx.restore();
+      }
+      ctx.save();ctx.translate(tip.x,tip.y);ctx.rotate(tip.a);leafShape(80*p.s,40*p.s);ctx.restore();
+    }else if(p.kind==='round'){
+      for(let j=0;j<p.leaves;j++){
+        const t=0.35+j/p.leaves*0.65, q=stemPoint(p,t,b), sd=(j%2?1:-1);
+        const r=(14+ (1-t)*10)*p.s;
+        ctx.beginPath();ctx.ellipse(q.x+sd*r*0.9*Math.cos(q.a),q.y+sd*r*0.9*Math.sin(q.a),r,r*0.82,q.a,0,Math.PI*2);ctx.fill();
+      }
+    }else{ // tall: sansevieria-like blades
+      for(let j=0;j<3;j++){
+        const bb=b*(0.8+j*0.15)+(j-1)*0.16*p.flip;
+        ctx.save();ctx.translate(p.x+(j-1)*8*p.s,p.baseY);ctx.rotate(bb);leafShape(p.h*(0.75+j*0.12),15*p.s);ctx.restore();
+      }
+    }
+  }
+
+  // ---------- scene layers
+  function drawSoil(a,off){
+    if(a<=0.01) return;
+    ctx.globalAlpha=a;
+    const top=H*0.83+off;
+    ctx.fillStyle=C.soil; ctx.beginPath(); ctx.moveTo(0,top);
+    for(let x=0;x<=W;x+=40) ctx.lineTo(x, top+Math.sin(x*0.013)*8+Math.sin(x*0.041)*4);
+    ctx.lineTo(W,H+60); ctx.lineTo(0,H+60); ctx.fill();
+    ctx.fillStyle=C.soilDeep; ctx.globalAlpha=a*0.55; ctx.beginPath(); ctx.moveTo(0,top+70);
+    for(let x=0;x<=W;x+=40) ctx.lineTo(x, top+70+Math.sin(x*0.009+1)*10);
+    ctx.lineTo(W,H+60); ctx.lineTo(0,H+60); ctx.fill();
+    // roots
+    ctx.globalAlpha=a*0.8; ctx.strokeStyle=C.soilDeep; ctx.lineWidth=2.5; ctx.lineCap='round';
+    for(let i=0;i<plants.length;i+=7){
+      const p=plants[i]; if(p.L.depth!==2) continue;
+      ctx.beginPath(); ctx.moveTo(p.x,top+4);
+      ctx.quadraticCurveTo(p.x-14,top+40,p.x-22,top+72); ctx.moveTo(p.x,top+4);
+      ctx.quadraticCurveTo(p.x+10,top+44,p.x+26,top+66); ctx.moveTo(p.x,top+4); ctx.lineTo(p.x+2,top+80); ctx.stroke();
+    }
+    // pebbles
+    ctx.fillStyle='#F7F5EE'; ctx.globalAlpha=a*0.9;
+    for(let i=0;i<40;i++){const x=(i*97.3)%W, y=top+20+((i*53)%90); ctx.beginPath(); ctx.ellipse(x,y,3,2.2,0,0,Math.PI*2); ctx.fill();}
+    ctx.globalAlpha=1;
+  }
+  function drawFlash(f){
+    if(f<=0.01) return;
+    const cx=W*0.82, cy=-H*0.05;
+    ctx.globalAlpha=1;
+    // 1) whole screen overexposed, like stepping into direct sun
+    ctx.fillStyle=`rgba(255,253,238,${0.88*f})`; ctx.fillRect(0,0,W,H);
+    // 2) hot core from the top right
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.9);
+    g.addColorStop(0,`rgba(255,255,255,${f})`);
+    g.addColorStop(0.25,`rgba(255,250,215,${0.9*f})`);
+    g.addColorStop(0.6,`rgba(255,236,150,${0.45*f})`);
+    g.addColorStop(1,'rgba(255,236,150,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // 3) strong light shafts
+    ctx.save(); ctx.translate(cx,cy); ctx.globalCompositeOperation='lighter';
+    for(let i=0;i<9;i++){
+      ctx.rotate(0.16+i*0.025);
+      ctx.fillStyle=`rgba(255,240,170,${0.22*f})`;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-W*1.3,H*0.95); ctx.lineTo(-W*1.1,H*1.15); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function drawSun(a,off){
+    if(a<=0.01) return;
+    const cx=W*0.82, cy=-H*0.05+off;
+    const g=ctx.createRadialGradient(cx,cy,10,cx,cy,Math.max(W,H)*0.85);
+    g.addColorStop(0,`rgba(255,240,170,${0.85*a})`);
+    g.addColorStop(0.35,`rgba(244,215,107,${0.32*a})`);
+    g.addColorStop(1,'rgba(244,215,107,0)');
+    ctx.globalAlpha=1; ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    // soft rays
+    ctx.save(); ctx.translate(cx,cy); ctx.globalAlpha=0.16*a; ctx.fillStyle='#FFF6C8';
+    for(let i=0;i<7;i++){ctx.rotate(0.2+i*0.03); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-W*1.2,H*0.9); ctx.lineTo(-W*1.05,H*1.05); ctx.fill();}
+    ctx.restore();
+  }
+
+  // ---------- scroll → scene progress
+  const c1=document.getElementById('c1'), c2=document.getElementById('c2'), c3=document.getElementById('c3');
+  const hint=document.getElementById('hint'), state=document.getElementById('state');
+  const ease=t=>t<0?0:t>1?1:t*t*(3-2*t);
+  let prog=0, progS=0;
+  function readScroll(){ prog=Math.max(0,Math.min(2,scrollY/innerHeight)); }
+  addEventListener('scroll',readScroll,{passive:true});
+  // magnetic snap to scene 0 / 1 / 2 once the wheel stops
+  let snapTimer=0, snapping=false;
+  addEventListener('scroll',()=>{
+    clearTimeout(snapTimer);
+    if(snapping) return;
+    snapTimer=setTimeout(()=>{
+      const target=Math.round(scrollY/innerHeight)*innerHeight;
+      if(Math.abs(target-scrollY)>2){
+        snapping=true;
+        scrollTo({top:target,behavior:reduce?'auto':'smooth'});
+        setTimeout(()=>snapping=false,650);
+      }
+    },140);
+  },{passive:true});
+
+  let t0=performance.now();
+  let flashAt=-1, inSun=false;   // flash fires once each time scene 3 is entered
+  function frame(now){
+    const time=(now-t0)/1000;
+    progS+=(prog-progS)*(reduce?1:0.12);
+    const s1=ease(progS), s2=ease(progS-1);
+    if(!inSun && progS>1.6){ inSun=true; flashAt=time; }
+    if(inSun && progS<1.4){ inSun=false; }
+    let flash=0;
+    if(!reduce && flashAt>=0){
+      const ft=time-flashAt;
+      // 0.12s up -> holds bright 0.25s -> fades over ~1.6s
+      flash = ft<0.12 ? ft/0.12 : ft<0.37 ? 1 : Math.exp(-(ft-0.37)/0.6);
+      if(ft>3) flashAt=-1;
+    }
+    const sunLevel = s2*0.6;   // steady glow after the flash: softer
+    const off = (-K.shift*s1) + (2*K.shift*s2);   // scene 2: down a hair, scene 3: up a hair
+    const windAmt = (reduce||touch)?0:Math.max(0,1-progS*1.6)*K.strength;
+    paintWind(windAmt);
+
+    // background
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#EAF3DC'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=`rgba(251,252,244,${s2})`; ctx.fillRect(0,0,W,H);
+
+    drawSun(sunLevel,off);
+    ctx.save(); ctx.translate(0,off);
+    for(const p of plants){
+      const tipY=p.baseY-p.h+off;
+      const w=sample(p.x,tipY)*p.L.gain;
+      const idle=reduce?0:Math.sin(time*1.6+p.phase+p.x*0.004)*0.025*(1-0.5*s1);
+      const target=Math.max(-0.32,Math.min(0.32,w*0.32))+idle;
+      // spring toward target (returns in ~0.8s)
+      p.vel+=(target-p.bend)*p.L.lag*1.4; p.vel*=0.78; p.bend+=p.vel;
+      drawPlant(p,p.bend);
+    }
+    ctx.globalAlpha=1; ctx.restore();
+    drawSoil(s1*(1-0.85*s2), off);
+    drawFlash(flash);
+
+    // copy
+    c1.style.opacity=1-ease(progS*1.8);
+    c1.style.transform=`translateY(${-progS*24}px)`;
+    const a2=ease((progS-0.55)*3)*(1-ease((progS-1.35)*3));
+    c2.style.opacity=a2; c2.style.transform=`translateY(calc(-50% + ${(1-a2)*16}px))`;
+    const a3=ease((progS-1.55)*3);
+    c3.style.opacity=a3; c3.style.transform=`translateY(calc(-50% + ${(1-a3)*16}px))`;
+    c1.style.visibility=c1.style.opacity<0.02?'hidden':'visible';
+    c2.style.visibility=a2<0.02?'hidden':'visible';
+    c3.style.visibility=a3<0.02?'hidden':'visible';
+    hint.style.opacity=1-ease(progS*3);
+    state.textContent = progS<0.5?'장면 1 · 히어로 (바람)': progS<1.5?'장면 2 · 흙 (배경 아래로 '+K.shift+'px)':'장면 3 · 햇빛 (배경 위로 '+K.shift+'px)';
+    requestAnimationFrame(frame);
+  }
+  resize(); readScroll(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

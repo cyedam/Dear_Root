@@ -1,0 +1,89 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+/* 크기 */
+.btn--lg {
+  width: var(--button-width);
+  height: var(--control-lg);
+  flex-shrink: 0;
+}
+
+.btn--md {
+  height: var(--control-md);
+}
+
+.btn--block {
+  width: 100%;
+  height: var(--control-lg);
+}
+
+/* 주요 버튼 */
+.btn--primary {
+  gap: 10px;
+  border: 0;
+  background: var(--leaf-green);
+  color: var(--white);
+  font-size: 18px;
+  box-shadow: var(--shadow-cta);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--leaf-green-hover);
+  color: var(--white);
+}
+
+/* 보조 버튼 */
+.btn--secondary {
+  border: 1.5px solid var(--leaf-green);
+  background: var(--white);
+  color: var(--leaf-green);
+  font-size: 16px;
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--pale-lime);
+  color: var(--leaf-green);
+}
+
+/* 장면 위 버튼 */
+.btn--scene {
+  border: 1px solid rgba(31,42,34,0.14);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 16px;
+  box-shadow: var(--shadow-scene);
+}
+
+.btn--scene .btn__icon {
+  color: var(--leaf-green);
+}
+
+.btn--scene:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-scene-hover);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+}

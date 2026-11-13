@@ -1,0 +1,157 @@
+@import './styles/tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--leaf-green);
+}
+
+a:hover {
+  color: var(--leaf-green-deep);
+}
+
+button {
+  font-family: inherit;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+/* 제목 스타일 (디자인 시스템 타이포 토큰) */
+.display-hero { font-family: var(--font-display); font-size: 60px; line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; }
+.display-1 { font-family: var(--font-display); font-size: 44px; line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; }
+.display-2 { font-family: var(--font-display); font-size: 32px; line-height: 1.3; font-weight: 400; }
+.display-3 { font-family: var(--font-display); font-size: 26px; line-height: 1.4; font-weight: 400; }
+
+/* 섹션 기본 여백 */
+.section {
+  padding: var(--section-top) var(--page-gutter) var(--section-bottom);
+}
+
+.section--tint {
+  background: var(--pale-lime);
+}
+
+/* 카드 hover (디자인 .dr-card) */
+.card-hover {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* 등장 애니메이션 (디자인 .dr-in) */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fade-in { animation: fade-in-up .45s var(--ease-out) both; }
+.fade-in-1 { animation-delay: .05s; }
+.fade-in-2 { animation-delay: .25s; }
+.fade-in-3 { animation-delay: .45s; }
+.fade-in-4 { animation-delay: .65s; }
+
+/* 배지 (디자인 시스템 Badge) — 라임 · 샌드는 면으로만, 글자는 리프 그린 · 흙 글자색 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: var(--badge-sm);
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.badge--lg {
+  height: 32px;
+  padding: 0 16px;
+}
+
+.badge--lime {
+  background: var(--lime);
+  color: var(--leaf-green);
+}
+
+.badge--sand {
+  background: var(--sand);
+  color: var(--soil-ink);
+}
+
+/* 가격 [미정] */
+.price {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 문구 + 버튼 한 줄 (체험 유도 · 다음 행동) */
+.cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.cta-row__text {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* 이미지 자리 공통: 둥근 모서리 + 가득 채움 */
+.media-fill {
+  overflow: hidden;
+}
+
+.media-fill > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 뿌리파리 일러스트는 그림이 작게 그려져 있어 확대해서 보여 줌 (P2 · P4 공통) */
+img[src*="bug-fungus-gnat"] {
+  transform: scale(1.6);
+  transform-origin: 50% 45%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in { animation: none; }
+  .card-hover { transition: none; }
+}

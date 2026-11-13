@@ -1,0 +1,375 @@
+.diy {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.diy__head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diy__sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.diy__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 48px;
+  align-items: start;
+}
+
+.diy__materials {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diy__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diy__label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.diy__hint {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+/* MaterialCard */
+.material-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.material-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--line);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.material-card.is-selected {
+  border-color: var(--leaf-green);
+  box-shadow: var(--shadow-selected);
+}
+
+.material-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 12px;
+}
+
+.material-card__media {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  background: var(--pale-lime);
+  overflow: hidden;
+}
+
+.material-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.material-card__name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.material-card__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  min-height: 42px;
+}
+
+.material-card__stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 16px;
+}
+
+.stepper-btn {
+  width: var(--control-sm);
+  height: var(--control-sm);
+  padding: 0;
+  border-radius: var(--radius-pill);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.stepper-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.stepper-btn:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.stepper-btn--minus {
+  border: 1.5px solid var(--leaf-green);
+  background: var(--white);
+  color: var(--leaf-green);
+}
+
+.stepper-btn--plus {
+  border: 0;
+  background: var(--leaf-green);
+  color: var(--white);
+}
+
+.material-card__count {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+
+.material-card__count.is-on {
+  color: var(--leaf-green);
+}
+
+/* SoilMeter */
+.soil-meter {
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  background: var(--pale-lime);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.soil-meter__bag-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.soil-meter__bag-box {
+  position: relative;
+  width: 260px;
+  height: 300px;
+}
+
+.soil-bag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 220px;
+  height: 300px;
+  border-radius: 10px 10px 14px 14px;
+  background: var(--white);
+  box-shadow: var(--shadow-bag), inset 0 0 0 2px var(--line-strong);
+  overflow: hidden;
+}
+
+.soil-bag__top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 24px;
+  background: var(--line);
+}
+
+.soil-bag__bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background: var(--line);
+}
+
+.soil-bag__seam {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  border-top: 2px dashed var(--placeholder-line-neutral);
+}
+
+.soil-bag__seam--top {
+  top: 11px;
+}
+
+.soil-bag__seam--bottom {
+  bottom: 6px;
+}
+
+.soil-bag__inner {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 34px;
+  bottom: 24px;
+  border-radius: 6px;
+  background: var(--bag-inner);
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: hidden;
+}
+
+@keyframes layer-drop {
+  from { transform: translateY(-140%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.soil-bag__layer {
+  flex: 0 0 10%;
+  animation: layer-drop .38s var(--ease-out) both;
+}
+
+.soil-meter__ticks {
+  position: absolute;
+  left: 228px;
+  top: 34px;
+  bottom: 24px;
+  width: 32px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.soil-meter__tick {
+  position: relative;
+  flex: 1 1 0;
+  border-top: 1.5px solid var(--placeholder-line-neutral);
+}
+
+.soil-meter__tick.is-major {
+  border-top: 2px solid var(--leaf-green);
+}
+
+.soil-meter__tick span {
+  position: absolute;
+  left: 4px;
+  top: -9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--leaf-green);
+  background: var(--pale-lime);
+}
+
+.soil-meter__gauge {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.soil-meter__gauge-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.soil-meter__count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.soil-meter__count-num {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--leaf-green);
+}
+
+.soil-meter__count-max {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.soil-meter__reset {
+  width: 150px;
+}
+
+.soil-meter__slots {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.soil-meter__slot {
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--white);
+  border: 1px solid var(--line-strong);
+  transition: background-color .25s;
+}
+
+.soil-meter__slot[style] {
+  border: 0;
+}
+
+.soil-meter__liters {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.soil-meter__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.soil-meter__bar-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.soil-meter__bar-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.soil-meter__bar-track {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.soil-meter__bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--leaf-green);
+  transition: width .4s var(--ease-out);
+}
+
+.soil-meter__result {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.soil-meter__result-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .soil-bag__layer { animation: none; }
+  .stepper-btn { transition: none; }
+}

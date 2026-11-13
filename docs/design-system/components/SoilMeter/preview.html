@@ -1,0 +1,49 @@
+<!-- @dsCard group="DIY" height=470 -->
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--font-sans);word-break:keep-all}
+.wrap{padding:24px;display:flex;flex-direction:column;gap:20px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.cap{font-size:12px;color:var(--ink-muted);font-weight:500}
+.dr-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-pill);font-family:inherit;cursor:pointer;text-decoration:none;transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease,opacity .2s ease}
+.dr-btn:active:not(:disabled){transform:scale(0.98)}
+.dr-btn:disabled{cursor:default;opacity:.4;box-shadow:none}
+.btn-primary{height:var(--control-lg);width:var(--button-width);border:0;background:var(--leaf-green);color:var(--white);font-size:18px;font-weight:500;box-shadow:var(--shadow-cta)}
+.btn-primary:hover:not(:disabled){background:var(--leaf-green-hover)}
+.btn-secondary{height:var(--control-lg);width:var(--button-width);border:1.5px solid var(--leaf-green);background:var(--white);color:var(--leaf-green);font-size:16px;font-weight:500}
+.btn-secondary:hover:not(:disabled){background:var(--pale-lime)}
+.btn-scene{height:var(--control-lg);width:var(--button-width);border:1px solid rgba(31,42,34,0.14);background:var(--white);color:var(--ink);font-size:16px;font-weight:500;box-shadow:var(--shadow-scene)}
+.btn-scene:hover{transform:translateY(-2px);box-shadow:var(--shadow-scene-hover)}
+.badge{display:inline-flex;align-items:center;height:var(--control-sm);padding:0 16px;border-radius:var(--radius-pill);font-size:14px;font-weight:600}
+.badge.sm{height:var(--badge-sm);padding:0 12px}
+.badge-lime{background:var(--lime);color:var(--leaf-green)}
+.badge-sand{background:var(--sand);color:var(--soil-ink)}
+.ph{display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg);background:var(--pale-lime);border:1px dashed var(--placeholder-line);font-size:14px;color:var(--ink-muted)}
+.ph-sand{display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg);background:var(--sand);font-size:14px;color:var(--soil-ink)}
+.dr-card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.dr-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.dsp{font-family:var(--font-display);font-weight:400;margin:0}
+h3,p{margin:0}
+@media (prefers-reduced-motion: reduce){.dr-btn,.dr-card{transition:none}}
+</style></head><body>
+<div class="wrap" style="padding:32px;background:var(--pale-lime);border-radius:var(--radius-xl);margin:16px;gap:28px;max-width:420px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between">
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:32px;font-weight:600;color:var(--leaf-green)">6</span><span style="font-size:18px;font-weight:500;color:var(--ink-muted)">/ 10 스쿱</span></div>
+<button type="button" class="dr-btn btn-secondary" style="width:130px;height:var(--control-md)">다시 담기</button>
+</div>
+<div aria-hidden="true" style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px">
+<span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-sangto)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-perlite);box-shadow:inset 0 0 0 1.5px var(--soil-perlite-edge)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-sangto)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-masa)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-perlite);box-shadow:inset 0 0 0 1.5px var(--soil-perlite-edge)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--soil-bark)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--white);border:1px solid var(--line-strong)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--white);border:1px solid var(--line-strong)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--white);border:1px solid var(--line-strong)"></span><span style="height:14px;border-radius:var(--radius-xs);background:var(--white);border:1px solid var(--line-strong)"></span>
+</div>
+<span style="font-size:14px;color:var(--ink-muted)">3.6L / 6L</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:grid;grid-template-columns:40px 1fr;align-items:center;gap:12px"><span style="font-size:14px;font-weight:600">배수</span><div style="height:10px;border-radius:999px;background:var(--white);overflow:hidden"><div style="width:67%;height:100%;border-radius:999px;background:var(--leaf-green)"></div></div></div>
+<div style="display:grid;grid-template-columns:40px 1fr;align-items:center;gap:12px"><span style="font-size:14px;font-weight:600">보습</span><div style="height:10px;border-radius:999px;background:var(--white);overflow:hidden"><div style="width:17%;height:100%;border-radius:999px;background:var(--leaf-green)"></div></div></div>
+<div style="display:grid;grid-template-columns:40px 1fr;align-items:center;gap:12px"><span style="font-size:14px;font-weight:600">영양</span><div style="height:10px;border-radius:999px;background:var(--white);overflow:hidden"><div style="width:17%;height:100%;border-radius:999px;background:var(--leaf-green)"></div></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px"><h2 class="dsp" style="font-size:26px;line-height:1.4">물이 잘 빠져요. 배수용 흙에 적합해요</h2><p style="font-size:16px;line-height:1.7;color:var(--ink-soft)">다육·선인장이나 과습이 걱정되는 식물에 잘 맞아요.</p></div>
+<button type="button" class="dr-btn btn-secondary" style="width:100%">이 배합으로 구매</button>
+</div>
+</body></html>
