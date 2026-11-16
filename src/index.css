@@ -210,6 +210,18 @@ img[src*="bug-fungus-gnat"] {
    - 맞춤 케어 체험 질문 중에는 아래 고정 막대('다음')와 겹치지 않게 막대 위로 올림
    - 케어 제품 DIY 재료 목록이 화면 아래 시트로 올라와 있는 동안(1100px 이하)은 숨김
    - 메인 월페이퍼 모드에서는 숨김 (커서는 그대로 따라다님) */
+/* 오른쪽 끝을 페이지 좌우 여백(--page-gutter) 안쪽에 맞춤 (메인 커서 · 월페이퍼 버튼과 같게) */
+.puffy-cursor-toggle {
+  right: var(--page-gutter) !important;
+  bottom: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .puffy-cursor-toggle {
+    bottom: 16px !important;
+  }
+}
+
 body:has(.quiz-nav) .puffy-cursor-toggle {
   bottom: 92px !important;
 }

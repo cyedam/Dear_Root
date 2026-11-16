@@ -320,7 +320,8 @@ body.hero-wall > img[aria-hidden='true'] {
 
 .hero-tools {
   position: absolute;
-  right: 24px;
+  /* 좌우는 페이지 여백(--page-gutter) 안쪽에 맞춤 (답변 2026-11-16) */
+  right: var(--page-gutter);
   bottom: 24px;
   z-index: 6;
   display: flex;
@@ -418,7 +419,6 @@ body:has(.hero-tools) .puffy-cursor-toggle {
 
 @media (max-width: 768px) {
   .hero-tools {
-    right: 16px;
     bottom: 16px;
   }
 

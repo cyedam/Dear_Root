@@ -923,17 +923,24 @@
     padding-top: 56px;
   }
 
-  /* 아주 넓은 화면에서 카드가 늘어나지 않도록 DIY 영역은 최대 1440px */
+  /* DIY 영역 폭은 아래 세트 · 개별 상품과 같게 (페이지 좌우 여백까지 꽉 채움, 답변 2026-11-16 — 이전: 최대 1440px) */
   .diy > * {
     width: 100%;
-    max-width: 1440px;
-    margin-inline: auto;
   }
 
   .diy__layout {
     grid-template-columns: minmax(0, 1fr) clamp(480px, 42vw, 640px);
     align-items: stretch;
     gap: 40px;
+  }
+
+  /* 흙 봉투 칸의 윗면을 재료 카드 묶음 윗면에 맞춤 (라벨 줄 높이 + 간격만큼 내림, 답변 2026-11-16) */
+  .diy__label-row {
+    min-height: 20px;
+  }
+
+  .soil-meter {
+    margin-top: 36px;
   }
 
   .diy__label-row {
