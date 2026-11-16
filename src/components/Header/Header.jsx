@@ -10,6 +10,8 @@ function Header({ overlay = false }) {
   const { pathname } = useLocation()
   const isMain = pathname === ROUTES.main
   const [solid, setSolid] = useState(false)
+  // 히어로 장면이 끝나 위로 밀려 올라가기 시작하면 GNB 뒤를 흐리게 (글자가 겹쳐 보이지 않게, 답변 2026-11-16)
+  const [blur, setBlur] = useState(false)
   // 모바일(768px 이하) 메뉴 펼침
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -31,7 +33,9 @@ function Header({ overlay = false }) {
     const onScroll = () => {
       // 히어로 장면이 GNB 아래로 다 지나가면 흰 바탕으로
       const hero = document.querySelector('.hero-track')
-      setSolid(hero ? hero.getBoundingClientRect().bottom < 80 : window.scrollY > 80)
+      const bottom = hero ? hero.getBoundingClientRect().bottom : 0
+      setSolid(hero ? bottom < 80 : window.scrollY > 80)
+      setBlur(!!hero && bottom < window.innerHeight - 1)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -42,7 +46,7 @@ function Header({ overlay = false }) {
     }
   }, [overlay])
 
-  const cls = ['gnb', overlay && 'gnb--overlay', overlay && solid && 'gnb--solid', menuOpen && 'is-menu-open']
+  const cls = ['gnb', overlay && 'gnb--overlay', overlay && solid && 'gnb--solid', overlay && blur && 'gnb--blur', menuOpen && 'is-menu-open']
     .filter(Boolean)
     .join(' ')
 

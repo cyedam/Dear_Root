@@ -321,8 +321,119 @@
 .faq-form {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 16px;
+}
+
+/* 질문 남기기 · 내 질문내역을 나란히 모아 오른쪽 정렬 (답변 2026-11-16) */
+.faq-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.faq-form__history-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--leaf-green);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (any-hover: hover) {
+  .faq-form__history-btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+.faq-form__history-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--leaf-green);
+  color: var(--white);
+  font-size: 12px;
+}
+
+.faq-history {
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.faq-history__empty {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.faq-history__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-history__item + .faq-history__item {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.faq-history__q {
+  margin: 0 0 6px;
+  color: var(--ink);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.faq-history__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+/* 알림창: 화면 아래 가운데에 잠깐 떠올랐다 사라짐 */
+.faq-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  z-index: 40;
+  max-width: calc(100vw - 32px);
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  translate: -50% 12px;
+  transition: opacity .25s ease, translate .25s ease;
+}
+
+.faq-toast.is-on {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-toast { transition: none; }
 }
 
 .faq-form__input {
@@ -455,12 +566,21 @@
     font-size: 16px; /* 16px 미만이면 iOS에서 입력할 때 화면이 확대됨 */
   }
 
-  .faq-form {
+  .faq-form__actions {
+    flex-direction: column;
     align-items: stretch;
   }
 
   .faq-form .btn--lg {
     width: 100%;
     max-width: none;
+  }
+
+  .faq-form__history-btn {
+    justify-content: center;
+  }
+
+  .faq-history {
+    padding: 16px;
   }
 }

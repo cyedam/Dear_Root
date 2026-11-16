@@ -87,7 +87,15 @@ function CareTest() {
               const state = n === q.step ? 'current' : n < q.step ? 'done' : 'todo'
               return (
                 <li key={label} className={`quiz-progress__step is-${state}`}>
-                  <span className="quiz-progress__dot">{state === 'done' ? '✓' : n}</span>
+                  {/* 숫자 없이 원만: 지금 단계 = 초록 원, 끝난 단계 = 체크, 아직 = 흐린 라임 원 (답변 2026-11-16) */}
+                  <span aria-hidden="true" className="quiz-progress__dot">
+                    {state === 'done' && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12.5l4.5 4.5L19 7.5" />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="visually-hidden">{`${n}단계${state === 'done' ? ' 완료' : state === 'current' ? ' 진행 중' : ''}: `}</span>
                   {label}
                 </li>
               )

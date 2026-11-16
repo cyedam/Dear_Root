@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '../../components/Button/Button.jsx'
 import { ROUTES } from '../../routes.js'
 import { BUGS, CARE_TOPICS, FAQS } from './guideData.js'
@@ -107,10 +107,53 @@ function BugItem({ bug, order }) {
   )
 }
 
-// P4-S6 자주 묻는 질문 — 처음에는 첫 번째 질문만 펼침
+// 남긴 질문 — 손님 브라우저에 저장 (답변 방식은 [미정], 지금은 '답변 준비 중'으로 표시)
+const QUESTIONS_KEY = 'dearRootQuestions'
+const loadQuestions = () => {
+  try {
+    return JSON.parse(localStorage.getItem(QUESTIONS_KEY)) || []
+  } catch {
+    return []
+  }
+}
+
+// P4-S6 자주 묻는 질문 — 처음에는 모두 접힘 (답변 2026-11-16)
 function Faq() {
-  const [openIndex, setOpenIndex] = useState(0)
+  const [openIndex, setOpenIndex] = useState(-1)
   const [question, setQuestion] = useState('')
+  // 내 질문내역 (답변 2026-11-16)
+  const [myQuestions, setMyQuestions] = useState(loadQuestions)
+  const [historyOpen, setHistoryOpen] = useState(false)
+  // 알림창 (몇 초 뒤 사라짐)
+  const [toast, setToast] = useState('')
+  const toastTimer = useRef(0)
+  const inputRef = useRef(null)
+  useEffect(() => () => clearTimeout(toastTimer.current), [])
+
+  const showToast = (msg) => {
+    clearTimeout(toastTimer.current)
+    setToast(msg)
+    toastTimer.current = setTimeout(() => setToast(''), 3200)
+  }
+
+  const submit = (e) => {
+    e.preventDefault()
+    const text = question.trim()
+    if (!text) {
+      inputRef.current?.focus()
+      showToast('궁금한 점을 먼저 적어 주세요.')
+      return
+    }
+    const next = [{ text, at: Date.now() }, ...myQuestions]
+    setMyQuestions(next)
+    try {
+      localStorage.setItem(QUESTIONS_KEY, JSON.stringify(next))
+    } catch {
+      /* 저장이 안 되는 브라우저면 이번 방문 동안만 보여 줌 */
+    }
+    setQuestion('')
+    showToast("질문을 남겼어요. '내 질문내역'에서 답변을 확인하세요.")
+  }
 
   return (
     <section id="qna" aria-label="궁금한 점 Q&A" className="section section--tint guide-faq">
@@ -146,11 +189,12 @@ function Faq() {
           )
         })}
       </ul>
-      <form className="faq-form" onSubmit={(e) => e.preventDefault()}>
+      <form className="faq-form" onSubmit={submit}>
         <label htmlFor="faq-question" className="visually-hidden">
           궁금한 점
         </label>
         <textarea
+          ref={inputRef}
           id="faq-question"
           className="faq-form__input"
           rows={5}
@@ -158,11 +202,46 @@ function Faq() {
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="궁금한 점을 적어 주세요. 어떤 식물인지, 언제부터 그랬는지 알려 주시면 더 정확하게 도와드릴 수 있어요."
         />
-        {/* P4-B1: 답변 방식 [미정] — 지금은 버튼까지만 */}
-        <Button variant="secondary" type="submit" className="faq-form__submit">
-          질문 남기기
-        </Button>
+        {/* P4-B1 질문 남기기 (답변 방식 [미정]) + 내 질문내역 — 나란히 오른쪽 정렬 (답변 2026-11-16) */}
+        <div className="faq-form__actions">
+          <Button variant="secondary" type="submit" className="faq-form__submit">
+            질문 남기기
+          </Button>
+          <button
+            type="button"
+            className="faq-form__history-btn"
+            aria-expanded={historyOpen}
+            aria-controls="faq-history"
+            onClick={() => setHistoryOpen((o) => !o)}
+          >
+            내 질문내역{myQuestions.length > 0 && <span className="faq-form__history-count">{myQuestions.length}</span>}
+            <Chevron open={historyOpen} />
+          </button>
+        </div>
+        {historyOpen && (
+          <div id="faq-history" className="faq-history fade-in">
+            {myQuestions.length === 0 ? (
+              <p className="faq-history__empty">아직 남긴 질문이 없어요.</p>
+            ) : (
+              <ul className="faq-history__list">
+                {myQuestions.map((q) => (
+                  <li key={q.at} className="faq-history__item">
+                    <p className="faq-history__q">Q. {q.text}</p>
+                    <div className="faq-history__meta">
+                      <span>{new Date(q.at).toLocaleDateString('ko-KR')}</span>
+                      <span className="badge badge--lime">답변 준비 중</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </form>
+      {/* 알림창 */}
+      <div role="status" aria-live="polite" className={`faq-toast${toast ? ' is-on' : ''}`}>
+        {toast}
+      </div>
     </section>
   )
 }

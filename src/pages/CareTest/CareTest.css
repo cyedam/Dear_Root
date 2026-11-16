@@ -49,7 +49,8 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  background: var(--pale-lime);
+  /* 아직 도달하지 않은 단계: 흐린 라임 */
+  background: rgba(198, 224, 122, 0.35);
   color: var(--ink-muted);
   transition: background-color .3s, color .3s;
 }
