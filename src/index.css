@@ -50,8 +50,22 @@ h1, h2, h3, p {
 .display-3 { font-family: var(--font-display); font-size: 26px; line-height: 1.4; font-weight: 400; }
 
 /* 섹션 기본 여백 */
+/* 섹션 하나 = 화면 한 장 (답변 2026-11-16)
+ * GNB(화면 위 고정)를 뺀 화면 높이를 최소 높이로, 내용은 세로 가운데. 내용이 더 길면 늘어남 */
 .section {
   padding: var(--section-top) var(--page-gutter) var(--section-bottom);
+  min-height: calc(100vh - var(--nav-height) - var(--nav-pad-top));
+  min-height: calc(100svh - var(--nav-height) - var(--nav-pad-top));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+/* 한두 줄짜리 섹션(페이지 소개 · 체험 유도 · 체험 결과)은 화면 한 장으로 늘리지 않음 (답변 2026-11-16) */
+.section--fit {
+  min-height: 0;
+  display: block;
 }
 
 .section--tint {
@@ -190,4 +204,20 @@ img[src*="bug-fungus-gnat"] {
   html { scroll-behavior: auto; }
   .fade-in { animation: none; }
   .card-hover { transition: none; }
+}
+
+/* 몬스테라 커서 끄기 버튼 (왼쪽 아래, puffy-web-cursor.js가 만듦) (답변 2026-11-16)
+   - 맞춤 케어 체험 질문 중에는 아래 고정 막대('이전 질문')와 겹치지 않게 막대 위로 올림
+   - 메인 월페이퍼 모드에서는 숨김 (커서는 그대로 따라다님) */
+body:has(.quiz-nav) .puffy-cursor-toggle {
+  bottom: 92px !important;
+}
+
+body.hero-wall .puffy-cursor-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.puffy-cursor-toggle {
+  transition: opacity .6s ease;
 }

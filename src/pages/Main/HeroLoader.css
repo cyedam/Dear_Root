@@ -1,0 +1,57 @@
+/* P1 로딩 화면 — GNB까지 덮고, 끝나면 같은 배경색(hero-lime)의 히어로로 이어짐 */
+.hero-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  opacity: 1;
+  transition: opacity 0.45s var(--ease-out); /* HeroLoader.jsx의 FADE와 맞춤 */
+}
+
+.hero-loader.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-loader__track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 7;
+}
+
+.hero-loader__fill {
+  fill: none;
+  stroke: var(--leaf-green);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+/* 잎 두 장: 100%가 되면 나타남 */
+.hero-loader__leaves {
+  opacity: 0;
+  transform: scale(0.6);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--ease-out);
+}
+
+.hero-loader__leaves.is-shown {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 동작 줄이기: 잎이 커지는 움직임 없이 바로 나타남 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-loader,
+  .hero-loader__leaves {
+    transition: none;
+  }
+  .hero-loader__leaves {
+    transform: none;
+  }
+}

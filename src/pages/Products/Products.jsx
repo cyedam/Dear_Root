@@ -1,10 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Button from '../../components/Button/Button.jsx'
 import { ROUTES } from '../../routes.js'
 import { NUTRIENTS, SETS, SOILS, formatPrice } from '../../data/products.js'
 import SoilMixer from './SoilMixer.jsx'
 import './Products.css'
+
+// 케어 제품 하위 메뉴 (GNB 아래, 답변 2026-11-16)
+const SUBNAV = [
+  { id: 'diy', label: '나만의 흙 만들기' },
+  { id: 'sets', label: '세트 상품' },
+  { id: 'items', label: '개별 상품' },
+]
 
 const TABS = [
   { id: 'soil', label: '흙 6종', items: SOILS },
@@ -16,9 +23,50 @@ function Products() {
   const { hash } = useLocation()
   const [tab, setTab] = useState(hash === '#items-nutri' ? 'nutri' : 'soil')
   const items = TABS.find((t) => t.id === tab).items
+  const [current, setCurrent] = useState('diy')
+
+  const target = (id) => document.querySelector(id === 'items' ? '[data-sub="items"]' : `#${id}`)
+
+  // 지금 보고 있는 섹션을 하위 메뉴에 표시
+  useEffect(() => {
+    const update = () => {
+      const line = window.innerHeight * 0.35
+      let now = 'diy'
+      SUBNAV.forEach(({ id }) => {
+        const el = target(id)
+        if (el && el.getBoundingClientRect().top <= line) now = id
+      })
+      setCurrent(now)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
+  const go = (id) => {
+    const el = target(id)
+    if (!el) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
+  }
 
   return (
     <>
+      {/* 하위 메뉴: GNB 아래 고정, 누르면 해당 섹션으로 이동 */}
+      <nav aria-label="케어 제품 메뉴" className="subnav">
+        {SUBNAV.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            className={`subnav__link${current === id ? ' is-active' : ''}`}
+            aria-current={current === id ? 'true' : undefined}
+            onClick={() => go(id)}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+
       {/* P3-S1 DIY 흙 만들기 */}
       <SoilMixer />
 
@@ -47,7 +95,7 @@ function Products() {
       </section>
 
       {/* P3-S3 개별 상품 */}
-      <section id={`items-${tab}`} aria-label="개별 상품" className="section products-section products-section--single">
+      <section id={`items-${tab}`} data-sub="items" aria-label="개별 상품" className="section products-section products-section--single">
         <h2 className="display-2">개별 상품</h2>
         <div role="tablist" aria-label="상품 종류" className="tabs">
           {TABS.map((t) => (
@@ -81,7 +129,7 @@ function Products() {
       </section>
 
       {/* P3-S4 체험 유도 */}
-      <section aria-label="체험 유도" className="section section--tint">
+      <section aria-label="체험 유도" className="section section--fit section--tint">
         <div className="cta-row">
           <p className="cta-row__text">어떤 흙이 맞는지 잘 모르겠다면, 몇 가지 질문으로 같이 찾아봐요.</p>
           <Button variant="primary" to={ROUTES.careTest} icon="right">

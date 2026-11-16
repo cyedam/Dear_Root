@@ -108,17 +108,11 @@
   pointer-events: auto;
 }
 
-/* 히어로 · 장면 ① · ② 제목: 흰 외곽선 (선을 글자 뒤에 그려 글자 굵기는 그대로) */
+/* 히어로 · 장면 ① · ② 제목: 태나다체 · 진한 올리브 그린 (답변 2026-11-16, 외곽선 없음) */
 .hero-copy .display-hero,
 .hero-copy__title {
-  font-family: var(--font-hero); /* 태나다체 */
-  -webkit-text-stroke: 6px #FFFFFF;
-  paint-order: stroke fill;
-}
-
-@media (max-width: 768px) {
-  .hero-copy .display-hero,
-  .hero-copy__title { -webkit-text-stroke-width: 4px; }
+  font-family: var(--font-hero);
+  color: #234D35; /* 버튼 색(#2E7D4F)과 같은 초록, 더 어둡고 채도 낮게 (답변 2026-11-16) */
 }
 
 /* 제목 → 설명 24px, 설명 → 버튼 40px */
@@ -126,7 +120,7 @@
   margin-top: 24px;
   font-size: 18px;
   line-height: 1.75;
-  color: var(--ink-soft);
+  color: #4A5D23; /* 올리브 계열, 제목보다 한 톤 밝게 (답변 2026-11-16) */
   /* 흰 네온처럼 번지는 외곽 빛 (가까운 선명한 빛 + 멀리 퍼지는 흐린 빛) */
   text-shadow:
     0 0 2px #FFFFFF,
@@ -212,4 +206,225 @@
   .hero-track {
     height: 200vh;
   }
+}
+
+/* ===== 첫 화면 등장 (답변 2026-11-16) =====
+ * ① 제목: 줄마다 아래에서 올라옴 (줄 상자 밖은 가려서 '밑에서 솟아오르는' 느낌)
+ * ② 설명 · 버튼: 제목 상자 밑에서 아래로 내려오며 나타남
+ * ③ 버튼: 자리 잡은 뒤 빛이 한 번 스쳐 지나감
+ * transform 대신 translate를 써서 버튼 누름 효과(scale)와 겹치지 않게 함 */
+.hero-intro .hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.hero-intro .hero-line > span {
+  display: inline-block;
+  translate: 0 110%;
+  animation: hero-line-up 0.9s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+}
+
+.hero-intro .hero-line:nth-child(1) > span { animation-delay: 0.25s; }
+.hero-intro .hero-line:nth-child(2) > span { animation-delay: 0.4s; }
+
+.hero-intro .hero-copy__desc,
+.hero-intro .hero-copy__btn {
+  position: relative;
+  z-index: 0;
+  opacity: 0;
+  translate: 0 -28px;
+  animation: hero-drop 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+}
+
+.hero-intro .hero-copy__desc { animation-delay: 1.05s; }
+.hero-intro .hero-copy__btn { animation-delay: 1.25s; }
+
+.hero-intro .display-hero {
+  position: relative;
+  z-index: 1;
+}
+
+/* 버튼 반짝 — 비스듬한 빛줄기가 왼쪽에서 오른쪽으로 한 번 */
+.hero-intro .hero-copy__btn {
+  overflow: hidden;
+}
+
+.hero-intro .hero-copy__btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 45%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  animation: hero-shine 0.9s ease-in-out 2.15s 1 forwards;
+}
+
+@keyframes hero-line-up {
+  to { translate: 0 0; }
+}
+
+@keyframes hero-drop {
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes hero-shine {
+  to { left: 130%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro .hero-line > span,
+  .hero-intro .hero-copy__desc,
+  .hero-intro .hero-copy__btn {
+    animation: none;
+    opacity: 1;
+    translate: none;
+  }
+
+  .hero-intro .hero-copy__btn::after {
+    display: none;
+  }
+}
+
+/* ── 월페이퍼 모드 (답변 2026-11-16) ─────────────────
+   오른쪽 아래 작은 버튼 → 글씨 · 메뉴가 천천히 사라지고 움직이는 배경 + 떠오르는 빛 알갱이만 남음 */
+.hero-copy__group {
+  transition: opacity .8s ease, visibility 0s;
+}
+
+.hero-stage.is-wall .hero-copy__group {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .8s ease, visibility 0s .8s;
+}
+
+body.hero-wall .gnb {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .8s ease, visibility 0s .8s;
+}
+
+body.hero-wall .scroll-top__btn {
+  visibility: hidden;
+}
+
+.hero-tools {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--leaf-green-deep);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .6s ease, background-color .2s, color .2s;
+}
+
+/* 커서를 끈 상태: 회색 글자 */
+.hero-cursor-btn.is-off {
+  color: var(--ink-muted);
+}
+
+/* 월페이퍼 중에는 커서 버튼을 숨김 (월페이퍼 버튼만 옅게 남음) */
+.hero-tools.is-wall .hero-cursor-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 메인에서는 커서 기본 끄기 버튼(왼쪽 아래 동그라미) 대신 위 버튼을 씀 */
+body:has(.hero-tools) .puffy-cursor-toggle {
+  display: none !important;
+}
+
+.hero-wall-btn.is-on {
+  opacity: 0.45;
+}
+
+@media (any-hover: hover) {
+  .hero-tool-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.hero-tool-btn:focus-visible {
+  opacity: 1;
+}
+
+/* 떠오르는 빛 알갱이 — 월페이퍼 모드에서만 보임 */
+.hero-motes {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+.hero-stage.is-wall .hero-motes {
+  opacity: 1;
+}
+
+.hero-motes span {
+  position: absolute;
+  bottom: -12px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 240, 1) 0%, rgba(255, 238, 150, 0.75) 45%, rgba(255, 238, 150, 0) 72%);
+  box-shadow: 0 0 10px 2px rgba(255, 236, 150, 0.55);
+  animation: hero-mote var(--dur) linear var(--delay) infinite;
+  animation-play-state: paused;
+}
+
+.hero-stage.is-wall .hero-motes span {
+  animation-play-state: running;
+}
+
+@keyframes hero-mote {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: 0.9; }
+  50% { transform: translate3d(calc(var(--drift) * 0.6), -48vh, 0); }
+  85% { opacity: 0.6; }
+  100% { transform: translate3d(var(--drift), -92vh, 0); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .hero-tools {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .hero-tool-btn {
+    height: 34px;
+    padding: 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-motes { display: none; }
+  .hero-copy__group,
+  .hero-stage.is-wall .hero-copy__group,
+  body.hero-wall .gnb { transition: none; }
 }

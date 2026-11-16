@@ -12,15 +12,16 @@ import riceHullCharcoal from '../../assets/P3/diy-rice-hull-charcoal-photo.jpg'
 export const MAX_SCOOPS = 10
 export const LITERS_PER_SCOOP = 0.6
 
+// tags: 이 재료가 올려 주는 결과 막대 (evaluateMix와 같은 기준) — 재료 카드 아래 뱃지
 export const MATERIALS = [
-  { id: 'sangto', name: '상토', desc: '영양과 보습을 함께', color: 'var(--soil-sangto)', image: pottingSoil },
-  { id: 'buyeop', name: '부엽토', desc: '양분이 많아요', color: 'var(--soil-buyeop)', image: leafMold },
-  { id: 'coco', name: '코코피트', desc: '물을 오래 머금어요', color: 'var(--soil-coco)', image: cocoCoir },
-  { id: 'jilseok', name: '질석', desc: '물과 양분을 붙잡아요', color: 'var(--soil-jilseok)', image: vermiculite },
-  { id: 'perlite', name: '펄라이트', desc: '숨구멍을 만들어요', color: 'var(--soil-perlite)', light: true, image: perlite },
-  { id: 'masa', name: '마사토', desc: '물이 잘 빠져요', color: 'var(--soil-masa)', image: masato },
-  { id: 'bark', name: '바크', desc: '공기가 잘 통해요', color: 'var(--soil-bark)', image: bark },
-  { id: 'hun', name: '훈탄', desc: '뿌리 썩음을 줄여요', color: 'var(--soil-huntan)', image: riceHullCharcoal },
+  { id: 'sangto', name: '상토', desc: '영양과 보습을 함께', tags: ['보습', '영양'], color: 'var(--soil-sangto)', image: pottingSoil },
+  { id: 'buyeop', name: '부엽토', desc: '양분이 많아요', tags: ['영양'], color: 'var(--soil-buyeop)', image: leafMold },
+  { id: 'coco', name: '코코피트', desc: '물을 오래 머금어요', tags: ['보습'], color: 'var(--soil-coco)', image: cocoCoir },
+  { id: 'jilseok', name: '질석', desc: '물과 양분을 붙잡아요', tags: ['보습'], color: 'var(--soil-jilseok)', image: vermiculite },
+  { id: 'perlite', name: '펄라이트', desc: '숨구멍을 만들어요', tags: ['배수'], color: 'var(--soil-perlite)', light: true, image: perlite },
+  { id: 'masa', name: '마사토', desc: '물이 잘 빠져요', tags: ['배수'], color: 'var(--soil-masa)', image: masato },
+  { id: 'bark', name: '바크', desc: '공기가 잘 통해요', tags: ['배수'], color: 'var(--soil-bark)', image: bark },
+  { id: 'hun', name: '훈탄', desc: '뿌리 썩음을 줄여요', tags: ['배수'], color: 'var(--soil-huntan)', image: riceHullCharcoal },
 ]
 
 export const MATERIAL_BY_ID = Object.fromEntries(MATERIALS.map((m) => [m.id, m]))

@@ -64,6 +64,10 @@
 }
 
 /* P4-S2 ~ S4 — 물 주기 : 햇빛 : 분갈이 = 1 : 1 : 1 가로 배치, 각 칸은 세로 */
+.guide-topics-section {
+  gap: 40px;
+}
+
 .guide-topics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

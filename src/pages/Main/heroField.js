@@ -33,23 +33,39 @@ export const SOURCES = { ...SHORT, ...TALL, ...NEUTRAL, ...BIG_BACK }
 import { BACKDROP, CENTER, FIELD, FILL_SPOTS, LAYERS, LOOK, TALL_BACK } from './heroConfig.js'
 
 const rnd = (a, b) => a + Math.random() * (b - a)
-const pickFrom = (obj) => {
-  const keys = Object.keys(obj)
-  return keys[Math.floor(Math.random() * keys.length)]
-}
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 const DEG = Math.PI / 180
 
-function pickKind(x, W) {
+// 가운데는 키 작은 식물, 가장자리는 키 큰 식물이 더 잘 나오도록 종류별 확률(가중치)
+function kindWeights(x, W) {
   // 0 = 화면 가운데, 1 = 가장자리
   const edge = Math.min(1, Math.abs(x - W / 2) / (W / 2))
-  const wShort = 1 + 2.5 * (1 - edge)
-  const wTall = 0.2 + 2.5 * edge
-  const wNeutral = 1
-  let r = Math.random() * (wShort + wTall + wNeutral)
-  if ((r -= wShort) < 0) return pickFrom(SHORT)
-  if ((r -= wTall) < 0) return pickFrom(TALL)
-  return pickFrom(NEUTRAL)
+  const wShort = (1 + 2.5 * (1 - edge)) / Object.keys(SHORT).length
+  const wTall = (0.2 + 2.5 * edge) / Object.keys(TALL).length
+  const wNeutral = 1 / Object.keys(NEUTRAL).length
+  const out = []
+  for (const k of Object.keys(SHORT)) out.push([k, wShort])
+  for (const k of Object.keys(TALL)) out.push([k, wTall])
+  for (const k of Object.keys(NEUTRAL)) out.push([k, wNeutral])
+  return out
+}
+
+// 같은 종류가 붙지 않게: 이미 세운 식물(모든 겹) 중 가까이(minGap 안)에 같은 종류가 있으면 그 종류는 뺌.
+// 다 빠지면 strict일 때는 null, 아니면 같은 종류가 가장 멀리 있는 종류를 고름
+function pickApart(weights, x, placed, minGap, strict = false) {
+  const nearest = (k) => {
+    let d = Infinity
+    for (const p of placed) if (p.name === k) d = Math.min(d, Math.abs(p.x - x))
+    return d
+  }
+  const ok = weights.filter(([k]) => nearest(k) >= minGap)
+  if (ok.length) {
+    let r = Math.random() * ok.reduce((s, [, w]) => s + w, 0)
+    for (const [k, w] of ok) if ((r -= w) < 0) return k
+    return ok[ok.length - 1][0]
+  }
+  if (strict) return null
+  return weights.reduce((best, [k]) => (nearest(k) > nearest(best) ? k : best), weights[0][0])
 }
 
 // 위쪽 윤곽선을 언덕처럼: 낮은 주파수 사인을 겹쳐 0~1 값
@@ -90,6 +106,8 @@ export function buildField(W, H, bitmaps) {
   const plants = []
   const ratio = W / 1440
   const hill = makeHill()
+  // 같은 종류끼리 이 거리 안에는 두지 않음 (화면 폭 4.5%, 최소 40px)
+  const minGap = Math.max(0.045 * W, 40)
 
   // 맨 뒤에 크고 옅게 세운 키 큰 식물 — 가로 전체에 고르게, 화면 위쪽까지 올라옴
   const tallLayer = { gain: TALL_BACK.gain, lag: 0.05, scale: TALL_BACK.scale, alpha: LOOK.tallBack.alpha }
@@ -117,20 +135,24 @@ export function buildField(W, H, bitmaps) {
   LAYERS.forEach((cfg, layerNo) => {
     const layer = { ...cfg, alpha: LOOK[cfg.id].alpha }
     const li = layerNo + 2 // 0 맨 뒤 키 큰 식물 · 1 가운데 큰 잎
-    // 화면 폭(-5% ~ 105%)을 같은 폭의 칸으로 나누고, 칸마다 1그루를 칸 폭의 ±60% 안에서 흔들어 둠
+    // 화면 폭(-5% ~ 105%)을 같은 폭의 칸으로 나누고, 칸마다 1그루를 칸 폭의 ±40% 안에서 흔들어 둠
     const n = Math.max(6, Math.round(cfg.count * ratio))
     const start = -0.05 * W
     const cell = (1.1 * W) / n
     let prevSize = 1
     for (let i = 0; i < n; i++) {
-      const x = start + cell * (i + 0.5) + rnd(-0.6, 0.6) * cell
+      const x = start + cell * (i + 0.5) + rnd(-0.4, 0.4) * cell
       const atEdge = x < W * 0.15 || x > W * 0.85
 
       // 양쪽 가장자리에 가끔만 올라오는 키 큰 그루
+      // 키 큰 3종이 모두 가까이 있으면 이번 칸은 보통 그루로 둠
       if (atEdge && Math.random() < FIELD.edgeTallChance) {
-        plants.push(makePlant(layer, li, x, H, pickFrom(TALL), bitmaps, cfg.base, rnd(FIELD.edgeTall[0], FIELD.edgeTall[1])))
-        prevSize = 1.5
-        continue
+        const tallName = pickApart(Object.keys(TALL).map((k) => [k, 1]), x, plants, minGap, true)
+        if (tallName) {
+          plants.push(makePlant(layer, li, x, H, tallName, bitmaps, cfg.base, rnd(FIELD.edgeTall[0], FIELD.edgeTall[1])))
+          prevSize = 1.5
+          continue
+        }
       }
 
       // 크기 리듬: ±sizeJitter, 가끔 아주 크거나 작게, 큰 그루 바로 옆은 작게 → 끝 높이로 반영
@@ -144,7 +166,7 @@ export function buildField(W, H, bitmaps) {
       // 언덕 모양 윤곽 + 크기 리듬 + 겹 차이
       const [t0, t1] = FIELD.tip
       const tip = t1 - (t1 - t0) * hill((x + 0.05 * W) / (1.1 * W)) - (size - 1) * 0.06 + cfg.tipShift + rnd(-0.02, 0.02)
-      plants.push(makePlant(layer, li, x, H, pickKind(x, W), bitmaps, cfg.base, clamp(tip, t0, t1)))
+      plants.push(makePlant(layer, li, x, H, pickApart(kindWeights(x, W), x, plants, minGap), bitmaps, cfg.base, clamp(tip, t0, t1)))
     }
   })
 

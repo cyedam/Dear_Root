@@ -107,6 +107,34 @@
   padding: 0 16px 16px;
 }
 
+/* 이름 + 결과(배수 · 보습 · 영양) 뱃지를 한 줄에 (답변 2026-11-16) */
+.material-card__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.material-card__tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.material-card__tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(198, 224, 122, 0.55);
+  color: var(--leaf-green);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .stepper-btn {
   width: var(--control-sm);
   height: var(--control-sm);
@@ -233,8 +261,23 @@
   to { transform: none; opacity: 1; }
 }
 
+/* 담은 재료 층: 재료 사진으로 채우고 윗면은 울퉁불퉁하게 (답변 2026-11-16)
+   층마다 아래로 10px 더 그려서 다음 층 밑으로 들어가게 → 위 층의 울퉁불퉁한 틈을 아래 층이 아니라 '새로 담은 층'이 메움 */
 .soil-bag__layer {
-  flex: 0 0 10%;
+  --bump: 10px;
+  position: relative;
+  flex: 0 0 calc(10% + var(--bump));
+  margin-top: calc(var(--bump) * -1);
+  background-size: 150px auto;
+  background-repeat: repeat;
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='10' viewBox='0 0 60 10'%3E%3Cpath d='M0 10V6C3 3 6 2 9 4s5 4 9 2 4-5 8-5 6 4 10 4 4-3 7-3 5 3 8 3 5-4 9-3v12z'/%3E%3C/svg%3E") var(--bump-x, 0) 0 / 60px var(--bump) repeat-x,
+    linear-gradient(#000, #000) 0 var(--bump) / 100% calc(100% - var(--bump)) no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='10' viewBox='0 0 60 10'%3E%3Cpath d='M0 10V6C3 3 6 2 9 4s5 4 9 2 4-5 8-5 6 4 10 4 4-3 7-3 5 3 8 3 5-4 9-3v12z'/%3E%3C/svg%3E") var(--bump-x, 0) 0 / 60px var(--bump) repeat-x,
+    linear-gradient(#000, #000) 0 var(--bump) / 100% calc(100% - var(--bump)) no-repeat;
+  /* 사진 위에 아주 옅은 그늘 → 층 경계가 보이게 */
+  box-shadow: inset 0 -6px 8px -6px rgba(40, 25, 10, 0.35);
   animation: layer-drop .38s var(--ease-out) both;
 }
 
@@ -648,12 +691,26 @@
     border-radius: var(--radius-md);
   }
 
-  .material-card__name {
+  .material-card__title {
+    grid-column: 2;
+    grid-row: 1;
     align-self: end;
+    gap: 4px 6px;
+  }
+
+  .material-card__name {
     font-size: 16px;
   }
 
+  .material-card__tag {
+    height: 20px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+
   .material-card__desc {
+    grid-column: 2;
+    grid-row: 2;
     align-self: start;
     min-height: 0;
     font-size: 13px;
@@ -899,13 +956,14 @@
 
   /* 재료 이미지: 카드 높이(결과 칸 높이 ÷ 4)에 맞추되, 카드 폭이 좁으면 수량 버튼 자리만큼 줄임 */
   .material-card {
-    --mat-media: min(calc((300px * var(--bag-z) + 180px) / 4 - 34px), calc(50cqi - 170px));
+    --mat-media: min(calc((300px * var(--bag-z) + 180px) / 4 - 38px), calc(50cqi - 176px));
     display: grid;
     grid-template-columns: var(--mat-media) minmax(0, 1fr);
-    grid-template-rows: 1fr auto auto auto 1fr;
-    column-gap: 14px;
-    row-gap: 2px;
-    padding: 10px;
+    /* 이름 + 뱃지 · 설명은 위에 붙이고, 수량 조절은 아래로 (답변 2026-11-16) */
+    grid-template-rows: auto auto 1fr auto;
+    column-gap: 16px;
+    row-gap: 6px;
+    padding: 12px 14px 12px 12px;
   }
 
   /* 안쪽 묶음을 풀어 이미지 · 이름 · 설명을 카드 칸에 바로 배치 */
@@ -920,15 +978,19 @@
     width: var(--mat-media);
   }
 
-  .material-card__name {
+  .material-card__title {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
+    padding-top: 2px;
+  }
+
+  .material-card__name {
     font-size: 16px;
   }
 
   .material-card__desc {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 2;
     min-height: 0;
     font-size: 13px;
   }
@@ -1020,8 +1082,8 @@
   }
 }
 
-/* 재료 칸이 넓으면 수량 조절을 카드 오른쪽 끝으로 (카드 안 빈 공간 없앰) */
-@container (min-width: 640px) {
+/* 재료 칸이 아주 넓으면 수량 조절을 카드 오른쪽 끝으로 (이름 + 뱃지 · 설명 자리를 넉넉히 남길 때만, 답변 2026-11-16) */
+@container (min-width: 820px) {
   .material-card {
     grid-template-columns: var(--mat-media) minmax(0, 1fr) auto;
   }

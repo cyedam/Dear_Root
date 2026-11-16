@@ -66,6 +66,7 @@ function CareTest() {
   }
 
   // 답을 하나도 고르지 않으면 '다음' 비활성
+  const cols = q.opts.length <= 4 ? q.opts.length : q.opts.length <= 8 ? 4 : 5
   const nextDisabled = q.multi ? value.length === 0 : value == null
 
   return (
@@ -74,7 +75,8 @@ function CareTest() {
       aria-label="맞춤 케어 체험 질문"
       className={`section quiz${q.opts.length > 8 ? ' quiz--dense' : ''}`}
       // 데스크탑 열 수: 4장 이하는 장 수만큼, 8장 이하는 4열, 그보다 많으면 5열
-      style={{ '--cols': q.opts.length <= 4 ? q.opts.length : q.opts.length <= 8 ? 4 : 5 }}
+      // --rows: 카드 줄 수 (카드 그림 높이를 화면 높이에 맞출 때 씀)
+      style={{ '--cols': cols, '--rows': Math.ceil(q.opts.length / cols) }}
     >
       {/* P2-S1 진행 표시 */}
       <div className="quiz-progress">
@@ -196,7 +198,7 @@ function Result({ ans, onRestart }) {
   return (
     <>
       {/* P2-S4 결과 요약 */}
-      <section aria-label="진단 결과" className="section section--tint">
+      <section aria-label="진단 결과" className="section section--fit section--tint">
         {/* 다시 하기 — 결과 화면 왼쪽 위 */}
         <Button
           variant="secondary"
@@ -234,7 +236,7 @@ function Result({ ans, onRestart }) {
 
       {/* P2-S5 다른 원인 · 벌레 대처 */}
       {r.others.length > 0 && (
-        <section aria-label="함께 살펴보면 좋아요" className="section result-others fade-in fade-in-3">
+        <section aria-label="함께 살펴보면 좋아요" className="section section--fit result-others fade-in fade-in-3">
           <h2 className="display-2">함께 살펴보면 좋아요</h2>
           <div className="result-others__list">
             {r.others.map((o) => (
@@ -252,7 +254,7 @@ function Result({ ans, onRestart }) {
 
       {/* P2-S6 추천 케어 (상품이 필요 없는 원인이면 숨김) */}
       {r.products.length > 0 && (
-        <section aria-label="추천 케어" className="section section--tint result-products fade-in fade-in-4">
+        <section aria-label="추천 케어" className="section section--fit section--tint result-products fade-in fade-in-4">
           <h2 className="display-2">내 식물을 위한 추천 케어</h2>
           <div className="result-products__grid">
             {r.products.map((p) => (
@@ -282,7 +284,7 @@ function Result({ ans, onRestart }) {
       )}
 
       {/* P2-S7 다음 행동 */}
-      <section aria-label="다음 행동" className="section">
+      <section aria-label="다음 행동" className="section section--fit">
         <div className="cta-row">
           <p className="cta-row__text">물 주기와 분갈이 방법을 더 자세히 알고 싶다면</p>
           <Button variant="primary" to={ROUTES.guide} icon="right">

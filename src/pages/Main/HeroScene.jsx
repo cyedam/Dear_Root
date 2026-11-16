@@ -41,6 +41,41 @@ function HeroScene() {
   // 마우스 · 트랙패드가 하나라도 연결돼 있으면 마우스 효과를 켬 (태블릿 + 트랙패드 포함)
   const [hasMouse] = useState(() => window.matchMedia('(any-pointer: fine)').matches)
 
+  // 월페이퍼 모드 — 글씨 · 메뉴를 모두 숨기고 움직이는 배경만 남김 (답변 2026-11-16)
+  const [wall, setWall] = useState(false)
+  // 몬스테라 커서 켜기 · 끄기 (index.html의 PuffyCursor). 커서가 켜질 수 있는 기기(PC)에서만 버튼을 보여 줌
+  const [cursorReady] = useState(() => !!window.__puffyCursorReady)
+  const [cursorOn, setCursorOn] = useState(() => !!window.PuffyCursor?.isEnabled())
+  const toggleCursor = () => {
+    if (!window.PuffyCursor) return
+    setCursorOn(window.PuffyCursor.setEnabled(!window.PuffyCursor.isEnabled()))
+  }
+  // 월페이퍼 모드에서 천천히 떠오르는 빛 알갱이 (위치 · 크기 · 빠르기는 처음 한 번만 정함)
+  const [motes] = useState(() =>
+    Array.from({ length: 18 }, () => ({
+      left: `${(Math.random() * 100).toFixed(1)}%`,
+      size: `${(4 + Math.random() * 7).toFixed(1)}px`,
+      dur: `${(14 + Math.random() * 12).toFixed(1)}s`,
+      delay: `${(-Math.random() * 26).toFixed(1)}s`,
+      drift: `${((Math.random() - 0.5) * 120).toFixed(0)}px`,
+    })),
+  )
+  useEffect(() => {
+    document.body.classList.toggle('hero-wall', wall)
+    // 월페이퍼 동안은 스크롤을 멈춰 지금 장면을 그대로 둠
+    document.documentElement.style.overflow = wall ? 'hidden' : ''
+    if (!wall) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') setWall(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.classList.remove('hero-wall')
+      document.documentElement.style.overflow = ''
+    }
+  }, [wall])
+
   useEffect(() => {
     const track = trackRef.current
     const stage = stageRef.current
@@ -246,10 +281,27 @@ function HeroScene() {
       for (const p of plants) {
         const w = sample(p.x, p.baseY - p.h + off) * p.layer.gain
         // 잔잔한 흔들림 — 터치 기기에서는 폭을 40%로 줄임
-        const idle = reduce ? 0 : Math.sin(time * 1.6 + p.phase + p.x * 0.004) * 0.025 * (touch ? 0.4 : 1) * (1 - 0.5 * s1)
-        const target = Math.max(-0.32, Math.min(0.32, w * 0.32)) + idle
-        p.vel += (target - p.bend) * p.layer.lag * 1.4
-        p.vel *= 0.78
+        // 잔잔한 흔들림 (답변 2026-11-16: 더 자유롭고 부드럽게)
+        //  · 바람결: 화면을 가로질러 천천히 지나가는 두 겹의 물결 → 이웃 식물이 시간차를 두고 같이 쓸림
+        //  · 하늘거림: 그루마다 빠르기가 다른 두 흔들림을 섞어 제각각 움직임
+        if (p.f1 === undefined) {
+          p.f1 = 0.7 + Math.random() * 0.9
+          p.f2 = 1.6 + Math.random() * 1.4
+          p.amp = 0.75 + Math.random() * 0.5
+        }
+        let idle = 0
+        if (!reduce) {
+          const gust =
+            Math.sin(time * 0.55 - p.x * 0.0026) * 0.6 +
+            Math.sin(time * 0.21 - p.x * 0.0011 + 1.3) * 0.4
+          const flutter = Math.sin(time * p.f1 + p.phase) * 0.6 + Math.sin(time * p.f2 + p.phase * 1.7) * 0.4
+          const depth = 0.55 + 0.45 * p.layer.gain // 앞 겹일수록 크게
+          idle = (gust * 0.038 + flutter * 0.02) * p.amp * depth * (touch ? 0.4 : 1) * (1 - 0.5 * s1)
+        }
+        const target = Math.max(-0.34, Math.min(0.34, w * 0.32)) + idle
+        // 스프링을 조금 무르게 → 부드럽게 따라가고 살짝 출렁이며 돌아옴
+        p.vel += (target - p.bend) * p.layer.lag * 0.9
+        p.vel *= 0.86
         p.bend += p.vel
       }
       lastOff = off
@@ -306,7 +358,7 @@ function HeroScene() {
 
   return (
     <div ref={trackRef} className="hero-track">
-      <div ref={stageRef} className="hero-stage">
+      <div ref={stageRef} className={`hero-stage${wall ? ' is-wall' : ''}`}>
         <div
           ref={sunTintRef}
           aria-hidden="true"
@@ -369,11 +421,11 @@ function HeroScene() {
 
         {/* P1-S1 히어로 — 화면 정가운데 */}
         <section id="top" aria-label="히어로" ref={(el) => (copyRefs.current[0] = el)} className="hero-copy">
-          <div className="hero-copy__group hero-copy__group--veil">
+          {/* 처음 들어올 때: 제목이 줄마다 아래에서 올라오고, 설명 · 버튼이 제목 밑에서 내려온 뒤 버튼이 한 번 반짝 */}
+          <div className="hero-copy__group hero-copy__group--veil hero-intro">
             <h1 className="display-hero">
-              잎이 보내는 신호를 읽고
-              <br />
-              뿌리부터 다시 돌봐요
+              <span className="hero-line"><span>잎이 보내는 신호를 읽고</span></span>
+              <span className="hero-line"><span>뿌리부터 다시 돌봐요</span></span>
             </h1>
             <p className="hero-copy__desc hero-copy__desc--lg">
               식물이 왜 시드는지 몰라도 괜찮아요.
@@ -415,6 +467,51 @@ function HeroScene() {
             </Button>
           </div>
         </section>
+
+        {/* 월페이퍼 모드의 빛 알갱이 */}
+        <div aria-hidden="true" className="hero-motes">
+          {motes.map((m, i) => (
+            <span
+              key={i}
+              style={{ left: m.left, '--size': m.size, '--dur': m.dur, '--delay': m.delay, '--drift': m.drift }}
+            />
+          ))}
+        </div>
+
+        {/* 오른쪽 아래 작은 버튼들 — 커서 켜기 · 끄기(PC에서만) + 월페이퍼(누르면 글씨 · 메뉴가 사라지고 배경만 남음, 다시 누르거나 Esc로 돌아옴) */}
+        <div className={`hero-tools${wall ? ' is-wall' : ''}`}>
+          {cursorReady && (
+            <button
+              type="button"
+              className={`hero-tool-btn hero-cursor-btn${cursorOn ? '' : ' is-off'}`}
+              aria-pressed={cursorOn}
+              onClick={toggleCursor}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 3l14 7-6 2-2 6z" />
+              </svg>
+              {cursorOn ? '커서 끄기' : '커서 켜기'}
+            </button>
+          )}
+          <button
+            type="button"
+            className={`hero-tool-btn hero-wall-btn${wall ? ' is-on' : ''}`}
+            aria-pressed={wall}
+            onClick={() => setWall((w) => !w)}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              {wall ? (
+                <path d="M4 7h16M4 12h10M4 17h13" />
+              ) : (
+                <>
+                  <rect x="3" y="4" width="18" height="16" rx="3" />
+                  <path d="M3 16l5-5 4 4 3-3 6 6" />
+                </>
+              )}
+            </svg>
+            {wall ? '글씨 보기' : '월페이퍼'}
+          </button>
+        </div>
       </div>
     </div>
   )

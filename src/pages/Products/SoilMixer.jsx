@@ -10,9 +10,21 @@ import {
 import '../../components/Button/Button.css'
 import './SoilMixer.css'
 
-const fillStyle = (m) => ({
+// 흙 봉투: 재료 색 대신 재료 사진(흙 미리보기)으로 채움
+const fillStyle = (m) => ({ backgroundImage: `url(${m.image})` })
+
+// 스쿱 원은 재료 색 단색 (답변 2026-11-16)
+const slotStyle = (m) => ({
   background: m.color,
   boxShadow: m.light ? 'inset 0 0 0 1.5px var(--soil-perlite-edge)' : undefined,
+})
+
+// 층마다 사진 위치 · 윗면 울퉁불퉁한 모양을 조금씩 다르게 (담은 순서 i로 고정 → 다시 그려도 같은 모양)
+const layerStyle = (m, i) => ({
+  ...fillStyle(m),
+  backgroundPosition: `${(i * 37) % 100}% ${(i * 61) % 100}%`,
+  '--bump-x': `${(i * 23) % 60}px`,
+  zIndex: 20 - i,
 })
 
 const TICKS = Array.from({ length: MAX_SCOOPS }, (_, i) => i + 1)
@@ -55,6 +67,13 @@ function SoilMixer() {
     }
   }, [])
 
+  // 휴대폰에서 재료를 담기 시작한 뒤 바텀시트가 보이는 동안 케어 제품 하위 메뉴를 숨김 (구매 버튼까지 시트 위에 보이게)
+  const hideSubnav = sheetVisible && seq.length > 0
+  useEffect(() => {
+    document.body.classList.toggle('diy-sheet-on', hideSubnav)
+    return () => document.body.classList.remove('diy-sheet-on')
+  }, [hideSubnav])
+
   // 바텀시트에서 처음 재료를 담을 때 '나만의 흙 만들기' 제목부터 흙 봉투 · 결과까지 시트 위에 보이도록 한 번 맞춤
   // (이후에는 사용자가 스크롤한 위치를 그대로 둠)
   const showMeter = () => {
@@ -62,8 +81,11 @@ function SoilMixer() {
     if (!window.matchMedia(SHEET_QUERY).matches || !headRef.current) return
     alignedRef.current = true
     // 화면 위에 고정된 GNB 바로 아래로 맞춤
+    // 휴대폰에서는 시트가 보이는 동안 하위 메뉴(.subnav)를 숨기므로 GNB 기준
     const gnb = document.querySelector('.gnb')
-    const offset = (gnb ? gnb.getBoundingClientRect().bottom : 0) + 12
+    const sub = document.querySelector('.subnav')
+    const subShown = sub && !window.matchMedia('(max-width: 768px)').matches
+    const offset = ((subShown ? sub : gnb)?.getBoundingClientRect().bottom ?? 0) + 12
     const top = headRef.current.getBoundingClientRect().top
     if (Math.abs(top - offset) > 24) {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -99,7 +121,7 @@ function SoilMixer() {
       className={`section diy${sheetOpen ? '' : ' is-sheet-closed'}`}
     >
       <div ref={headRef} className="diy__head">
-        <h1 className="display-1">나만의 흙 만들기</h1>
+        <h1 className="display-2">나만의 흙 만들기</h1>
         <p className="diy__sub">재료를 한 스쿱씩 담아 보세요. 담을 때마다 이 흙이 어떤 식물에 잘 맞는지 바로 알려 드려요.</p>
       </div>
 
@@ -153,7 +175,17 @@ function SoilMixer() {
                     <span className="material-card__media">
                       <img src={m.image} alt="" />
                     </span>
-                    <span className="material-card__name">{m.name}</span>
+                    {/* 이름 옆에 이 재료가 올려 주는 결과 뱃지 (배수 · 보습 · 영양) */}
+                    <span className="material-card__title">
+                      <span className="material-card__name">{m.name}</span>
+                      <span className="material-card__tags">
+                        {m.tags.map((t) => (
+                          <span key={t} className="material-card__tag">
+                            {t}
+                          </span>
+                        ))}
+                      </span>
+                    </span>
                     <span className="material-card__desc">{m.desc}</span>
                   </div>
                   <div className="material-card__stepper">
@@ -194,7 +226,7 @@ function SoilMixer() {
                 <div aria-hidden="true" className="soil-bag__seam soil-bag__seam--top" />
                 <div className="soil-bag__inner">
                   {seq.map((id, i) => (
-                    <div key={`${id}-${i}`} className="soil-bag__layer" style={fillStyle(MATERIAL_BY_ID[id])} />
+                    <div key={`${id}-${i}`} className="soil-bag__layer" style={layerStyle(MATERIAL_BY_ID[id], i)} />
                   ))}
                 </div>
                 <div aria-hidden="true" className="soil-bag__bottom" />
@@ -234,7 +266,7 @@ function SoilMixer() {
                 <span
                   key={n}
                   className="soil-meter__slot"
-                  style={i < total ? fillStyle(MATERIAL_BY_ID[seq[i]]) : undefined}
+                  style={i < total ? slotStyle(MATERIAL_BY_ID[seq[i]]) : undefined}
                 />
               ))}
             </div>

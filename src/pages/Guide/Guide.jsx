@@ -170,17 +170,17 @@ function Faq() {
 function Guide() {
   return (
     <>
-      {/* P4-S1 페이지 소개 */}
-      <section aria-label="케어 가이드 소개" className="section guide-intro">
-        <h1 className="display-1">케어 가이드</h1>
-        <p className="guide-intro__sub">처음 키우는 분도 따라 하기 쉽게, 꼭 필요한 것만 정리했어요.</p>
-      </section>
-
-      {/* P4-S2 물 주기 · S3 햇빛 · S4 분갈이 */}
-      <section aria-label="물 주기 · 햇빛 · 분갈이" className="section section--tint guide-topics">
-        {CARE_TOPICS.map((topic) => (
-          <CareTopic key={topic.id} topic={topic} />
-        ))}
+      {/* P4-S1 페이지 소개 + P4-S2 물 주기 · S3 햇빛 · S4 분갈이 (소개를 카드 위에 함께, 답변 2026-11-16) */}
+      <section aria-label="케어 가이드 · 물 주기 · 햇빛 · 분갈이" className="section section--tint guide-topics-section">
+        <div className="guide-section-head">
+          <h1 className="display-2">케어 가이드</h1>
+          <p className="guide-section-head__sub">처음 키우는 분도 따라 하기 쉽게, 꼭 필요한 것만 정리했어요.</p>
+        </div>
+        <div className="guide-topics">
+          {CARE_TOPICS.map((topic) => (
+            <CareTopic key={topic.id} topic={topic} />
+          ))}
+        </div>
       </section>
 
       {/* P4-S5 벌레 대처 */}
@@ -202,7 +202,7 @@ function Guide() {
       <Faq />
 
       {/* P4-S7 체험 유도 */}
-      <section aria-label="체험 유도" className="section">
+      <section aria-label="체험 유도" className="section section--fit">
         <div className="cta-row">
           <p className="cta-row__text">내 식물에 꼭 맞는 케어가 궁금하다면</p>
           <Button variant="primary" to={ROUTES.careTest} icon="right">

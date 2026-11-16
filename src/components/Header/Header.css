@@ -54,12 +54,17 @@ html {
   justify-self: start;
 }
 
+/* GNB 로고는 푸터보다 크게 (답변 2026-11-16) */
+.gnb .logo__img {
+  height: 54px;
+}
+
 .gnb__menu {
   justify-self: center;
   display: flex;
   align-items: center;
   gap: 48px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 }
 
@@ -107,6 +112,10 @@ html {
 
 /* 768px 이하: 로고 + 메뉴 버튼, 메뉴는 아래로 펼침 */
 @media (max-width: 768px) {
+  .gnb .logo__img {
+    height: 44px;
+  }
+
   :root {
     --nav-height: 64px;
     --nav-pad-top: 8px;
