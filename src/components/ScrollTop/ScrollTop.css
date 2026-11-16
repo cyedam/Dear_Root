@@ -31,3 +31,9 @@
 @media (prefers-reduced-motion: reduce) {
   .scroll-top__btn { transition: none; }
 }
+
+@media (max-width: 768px) {
+  .scroll-top {
+    padding: 32px var(--page-gutter);
+  }
+}

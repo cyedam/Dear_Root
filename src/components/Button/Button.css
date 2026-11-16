@@ -87,3 +87,11 @@
 @media (prefers-reduced-motion: reduce) {
   .btn { transition: none; }
 }
+
+/* ===== 반응형 — 좁은 화면에서 260px 버튼이 화면 밖으로 나가지 않게 ===== */
+@media (max-width: 480px) {
+  .btn--lg {
+    width: 100%;
+    max-width: var(--button-width);
+  }
+}

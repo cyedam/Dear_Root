@@ -429,3 +429,281 @@
   justify-content: center;
   gap: 16px;
 }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .choice-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* 질문 이동: 양옆 고정 → 화면 아래 고정 막대 (카드와 겹치지 않게) */
+  .quiz {
+    padding-bottom: calc(var(--section-bottom) + 72px);
+  }
+
+  .quiz-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px var(--page-gutter) calc(12px + env(safe-area-inset-bottom));
+    background: rgba(255,255,255,0.96);
+    border-top: 1px solid var(--line);
+    backdrop-filter: blur(8px);
+  }
+
+  .quiz-nav__btn {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .quiz-nav__btn--next {
+    flex-direction: row-reverse;
+    margin-left: auto;
+  }
+
+  .quiz-nav__circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .quiz-nav__label {
+    font-size: 15px;
+  }
+
+  /* 결과 요약: 그림 위 · 글 아래 */
+  .result-summary {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 40px;
+  }
+
+  .result-summary__media {
+    flex: none;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    aspect-ratio: 12 / 11;
+    margin: 0 auto;
+  }
+
+  .result-products__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz {
+    gap: 32px;
+  }
+
+  .quiz-progress__head {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .quiz-progress__steps {
+    gap: 14px;
+    font-size: 14px;
+  }
+
+  .quiz-progress__step {
+    gap: 6px;
+  }
+
+  .quiz-progress__dot {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .quiz-progress__count {
+    font-size: 15px;
+  }
+
+  .quiz-question {
+    gap: 24px;
+  }
+
+  .quiz-question__sub {
+    font-size: 16px;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .choice-card {
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radius-lg);
+  }
+
+  .choice-card__media {
+    border-radius: var(--radius-md);
+  }
+
+  .choice-card__name {
+    font-size: 16px;
+  }
+
+  .choice-card__desc {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .result-summary {
+    gap: 32px;
+  }
+
+  .result-summary__body {
+    gap: 24px;
+  }
+
+  .result-summary__desc,
+  .result-summary__action p {
+    font-size: 16px;
+  }
+
+  .result-summary__action {
+    padding: 24px;
+  }
+
+  .result-summary__action h3 {
+    font-size: 18px;
+  }
+
+  .result-summary__emphasis {
+    font-size: 18px;
+  }
+
+  .result-others,
+  .result-products {
+    gap: 24px;
+  }
+
+  .result-others__list {
+    gap: 12px;
+  }
+
+  .cause-item {
+    gap: 16px;
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .cause-item__media {
+    flex-basis: 72px;
+    height: 72px;
+  }
+
+  .cause-item__body h3 {
+    font-size: 17px;
+  }
+
+  .cause-item__body p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .rec-card {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .rec-card__media {
+    flex-basis: 120px;
+    height: 120px;
+  }
+
+  .rec-card__body h3 {
+    font-size: 19px;
+  }
+
+  .rec-card__body p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* 구매 버튼 두 개: 위아래로, 가로 꽉 채움 */
+  .result-products__actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 추천 상품 카드: 사진 위 · 글 아래 */
+  .rec-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rec-card__media {
+    flex: none;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .quiz-progress__steps {
+    gap: 10px;
+    font-size: 13px;
+  }
+}
+
+/* ===== 데스크탑 한 화면 맞춤 =====
+ * 질문 · 카드가 스크롤 없이 한 화면에 들어오도록
+ * 화면 높이에 맞춰 카드 크기를 정하고, 카드가 많으면 열을 늘려 두 줄로 맞춤
+ */
+@media (min-width: 1025px) {
+  .quiz {
+    --card-media: clamp(110px, 50vh - 340px, 260px);
+    --grid-gap: 24px;
+    gap: 32px;
+    padding-top: 56px;
+  }
+
+  .quiz--dense {
+    --grid-gap: 16px;
+  }
+
+  /* 진행 표시 · 제목 · 카드를 카드 묶음 폭에 맞춰 가운데 정렬 */
+  .quiz > * {
+    width: min(100%, calc(var(--cols) * (var(--card-media) + 40px) + (var(--cols) - 1) * var(--grid-gap)));
+    margin-inline: auto;
+  }
+
+  .quiz-question {
+    gap: 24px;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, calc(var(--card-media) + 40px)));
+    gap: var(--grid-gap);
+  }
+
+  .choice-card {
+    gap: 10px;
+    padding: 20px;
+  }
+
+  /* 카드가 많은 질문 (증상 등): 글자를 조금 줄임 */
+  .choice-grid--dense .choice-card {
+    padding: 14px;
+  }
+
+  .choice-grid--dense .choice-card__name {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+}

@@ -62,3 +62,102 @@
 .gnb__link.is-active {
   font-weight: 600;
 }
+
+.gnb__end {
+  justify-self: end;
+}
+
+/* 모바일 메뉴 버튼 — 데스크탑에서는 숨김 */
+.gnb__burger {
+  display: none;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .gnb__inner {
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+  }
+
+  .gnb__menu {
+    gap: 32px;
+  }
+}
+
+/* 768px 이하: 로고 + 메뉴 버튼, 메뉴는 아래로 펼침 */
+@media (max-width: 768px) {
+  .gnb {
+    --nav-height: 64px;
+  }
+
+  .gnb__inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .gnb__burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    padding: 0 11px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .gnb__burger span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ink);
+    transition: transform .25s var(--ease-out), opacity .2s;
+  }
+
+  .is-menu-open .gnb__burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .is-menu-open .gnb__burger span:nth-child(2) { opacity: 0; }
+  .is-menu-open .gnb__burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .gnb__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px var(--page-gutter) 16px;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 12px 24px rgba(31,42,34,0.08);
+    font-size: 17px;
+  }
+
+  .is-menu-open .gnb__menu {
+    display: flex;
+    animation: fade-in-up .25s var(--ease-out) both;
+  }
+
+  .gnb__link {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gnb__link:last-child {
+    border-bottom: 0;
+  }
+
+  /* 메인 투명 GNB도 메뉴를 펼치면 흰 바탕 */
+  .gnb--overlay.is-menu-open {
+    background: var(--white);
+    border-bottom-color: var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnb__burger span { transition: none; }
+  .is-menu-open .gnb__menu { animation: none; }
+}

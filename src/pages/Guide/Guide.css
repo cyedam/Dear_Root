@@ -338,3 +338,110 @@
   .toggle-btn,
   .chevron { transition: none; }
 }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  /* 물 주기 · 햇빛 · 분갈이: 한 줄에 하나씩 */
+  .guide-topics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guide-topic {
+    grid-row: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .guide-topic__media {
+    max-width: 560px;
+  }
+
+  .bug-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .guide-intro {
+    padding-bottom: 40px;
+  }
+
+  .guide-intro__sub,
+  .guide-section-head__sub {
+    font-size: 16px;
+  }
+
+  .guide-topic {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .guide-topic__media {
+    max-width: none;
+  }
+
+  .guide-bugs,
+  .guide-faq {
+    gap: 24px;
+  }
+
+  .bug-item {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .bug-item__media {
+    flex-basis: 80px;
+  }
+
+  .bug-item__title h3 {
+    font-size: 18px;
+  }
+
+  .bug-item__look,
+  .bug-item__action {
+    font-size: 15px;
+  }
+
+  .bug-item__detail {
+    padding: 14px 16px;
+  }
+
+  .bug-item__detail div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .bug-item__detail dd {
+    font-size: 15px;
+  }
+
+  .faq-list {
+    gap: 12px;
+  }
+
+  .faq-item__q {
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .faq-item__a {
+    padding: 0 20px 20px;
+    font-size: 15px;
+  }
+
+  .faq-form__input {
+    padding: 16px;
+    font-size: 16px; /* 16px 미만이면 iOS에서 입력할 때 화면이 확대됨 */
+  }
+
+  .faq-form {
+    align-items: stretch;
+  }
+
+  .faq-form .btn--lg {
+    width: 100%;
+    max-width: none;
+  }
+}

@@ -10,6 +10,21 @@ function Header({ overlay = false }) {
   const { pathname } = useLocation()
   const isMain = pathname === ROUTES.main
   const [solid, setSolid] = useState(false)
+  // 모바일(768px 이하) 메뉴 펼침
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // 페이지를 옮기면 메뉴를 닫음
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [pathname])
+
+  // Esc로 닫기
+  useEffect(() => {
+    if (!menuOpen) return undefined
+    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   useEffect(() => {
     if (!overlay) return undefined
@@ -27,7 +42,9 @@ function Header({ overlay = false }) {
     }
   }, [overlay])
 
-  const cls = ['gnb', overlay && 'gnb--overlay', overlay && solid && 'gnb--solid'].filter(Boolean).join(' ')
+  const cls = ['gnb', overlay && 'gnb--overlay', overlay && solid && 'gnb--solid', menuOpen && 'is-menu-open']
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <header className={cls}>
@@ -35,7 +52,7 @@ function Header({ overlay = false }) {
         <div className="gnb__logo">
           <Logo />
         </div>
-        <div className="gnb__menu">
+        <div id="gnb-menu" className="gnb__menu">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
@@ -50,7 +67,21 @@ function Header({ overlay = false }) {
             </NavLink>
           ))}
         </div>
-        <div aria-hidden="true" />
+        <div className="gnb__end">
+          {/* 모바일 메뉴 버튼 — 데스크탑에서는 숨김 */}
+          <button
+            type="button"
+            className="gnb__burger"
+            aria-expanded={menuOpen}
+            aria-controls="gnb-menu"
+            aria-label={menuOpen ? '메뉴 닫기' : '메뉴 열기'}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </button>
+        </div>
       </nav>
     </header>
   )

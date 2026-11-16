@@ -61,7 +61,13 @@ function CareTest() {
   const nextDisabled = q.multi && value.length === 0
 
   return (
-    <section id="test" aria-label="맞춤 케어 체험 질문" className="section quiz">
+    <section
+      id="test"
+      aria-label="맞춤 케어 체험 질문"
+      className={`section quiz${q.opts.length > 8 ? ' quiz--dense' : ''}`}
+      // 데스크탑: 카드가 두 줄 안에 들어가도록 열 수를 정함 (최소 4열)
+      style={{ '--cols': Math.max(4, Math.ceil(q.opts.length / 2)) }}
+    >
       {/* P2-S1 진행 표시 */}
       <div className="quiz-progress">
         <div className="quiz-progress__head">
@@ -100,7 +106,11 @@ function CareTest() {
           {q.sub && <p className="quiz-question__sub">{q.sub}</p>}
           {q.season && <span className="badge badge--lime badge--lg">{q.season}</span>}
         </div>
-        <div role={q.multi ? 'group' : 'radiogroup'} aria-label={q.title} className="choice-grid">
+        <div
+          role={q.multi ? 'group' : 'radiogroup'}
+          aria-label={q.title}
+          className={`choice-grid${q.opts.length > 8 ? ' choice-grid--dense' : ''}`}
+        >
           {q.opts.map((op) => {
             const on = q.multi ? value.includes(op.v) : value === op.v
             return (

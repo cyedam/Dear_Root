@@ -82,3 +82,26 @@
   --font-sans: 'Pretendard', system-ui, sans-serif;
   --font-logo: 'Outfit', sans-serif;
 }
+
+/* ===== 반응형 — 화면이 좁아지면 여백을 줄임 ===== */
+@media (max-width: 1280px) {
+  :root {
+    --page-gutter: 64px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --page-gutter: 40px;
+    --section-top: 80px;
+    --section-bottom: 88px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-gutter: 20px;
+    --section-top: 56px;
+    --section-bottom: 64px;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   LITERS_PER_SCOOP,
   MATERIALS,
@@ -17,6 +17,9 @@ const fillStyle = (m) => ({
 
 const TICKS = Array.from({ length: MAX_SCOOPS }, (_, i) => i + 1)
 
+// 이 폭 이하에서는 재료 목록이 화면 아래 바텀시트로 바뀜 (SoilMixer.css와 같은 값)
+const SHEET_QUERY = '(max-width: 1100px)'
+
 function SoilMixer() {
   // 담은 순서대로 쌓임 (한 칸 = 1스쿱). 처음에는 비어 있음
   const [seq, setSeq] = useState([])
@@ -25,8 +28,44 @@ function SoilMixer() {
   const cnt = countBy(seq)
   const mix = evaluateMix(seq)
 
+  // 바텀시트 (좁은 화면)
+  const sectionRef = useRef(null)
+  const meterRef = useRef(null)
+  const [sheetOpen, setSheetOpen] = useState(true)
+  const [sheetVisible, setSheetVisible] = useState(false)
+
+  // DIY 섹션이 화면에 있을 때만 바텀시트를 보여 줌 (세트 · 개별 상품을 가리지 않게)
+  useEffect(() => {
+    const update = () => {
+      const el = sectionRef.current
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const vh = window.innerHeight
+      setSheetVisible(r.top < vh * 0.7 && r.bottom > vh * 0.6)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  // 바텀시트에서 재료를 담으면 흙 봉투 · 결과가 화면 위쪽에 보이도록 맞춤
+  const showMeter = () => {
+    if (!window.matchMedia(SHEET_QUERY).matches || !meterRef.current) return
+    const top = meterRef.current.getBoundingClientRect().top
+    if (top < 0 || top > 40) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      window.scrollBy({ top: top - 12, behavior: reduce ? 'auto' : 'smooth' })
+    }
+  }
+
   const add = (id) => {
-    if (seq.length < MAX_SCOOPS) setSeq([...seq, id])
+    if (seq.length >= MAX_SCOOPS) return
+    setSeq([...seq, id])
+    showMeter()
   }
   const minus = (id) => {
     const i = seq.lastIndexOf(id)
@@ -34,6 +73,7 @@ function SoilMixer() {
     const next = [...seq]
     next.splice(i, 1)
     setSeq(next)
+    showMeter()
   }
 
   const potLabel = total
@@ -43,20 +83,58 @@ function SoilMixer() {
     : '흙 봉투가 비어 있어요'
 
   return (
-    <section id="diy" aria-label="나만의 흙 만들기" className="section diy">
+    <section
+      ref={sectionRef}
+      id="diy"
+      aria-label="나만의 흙 만들기"
+      className={`section diy${sheetOpen ? '' : ' is-sheet-closed'}`}
+    >
       <div className="diy__head">
         <h1 className="display-1">나만의 흙 만들기</h1>
         <p className="diy__sub">재료를 한 스쿱씩 담아 보세요. 담을 때마다 이 흙이 어떤 식물에 잘 맞는지 바로 알려 드려요.</p>
       </div>
 
       <div className="diy__layout">
-        {/* 왼쪽: 재료 카드 (MaterialCard) */}
-        <div className="diy__materials">
+        {/* 왼쪽: 재료 카드 (MaterialCard). 좁은 화면에서는 화면 아래 바텀시트 */}
+        <div
+          className={`diy__materials${sheetOpen ? ' is-open' : ''}${sheetVisible ? ' is-visible' : ''}`}
+        >
+          {/* 바텀시트 손잡이 — 넓은 화면에서는 숨김 */}
+          <button
+            type="button"
+            className="diy__sheet-handle"
+            aria-expanded={sheetOpen}
+            aria-controls="diy-material-list"
+            onClick={() => setSheetOpen((o) => !o)}
+          >
+            <span aria-hidden="true" className="diy__sheet-grabber" />
+            <span className="diy__sheet-head">
+              <span className="diy__sheet-title">재료 고르기</span>
+              <span className={`diy__sheet-count${total ? ' is-on' : ''}`}>
+                {total} / {MAX_SCOOPS} 스쿱
+              </span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="diy__sheet-chevron"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </span>
+            <span className="visually-hidden">{sheetOpen ? '재료 목록 접기' : '재료 목록 펼치기'}</span>
+          </button>
           <div className="diy__label-row">
             <span className="diy__label">재료 고르기 · 한 봉 6L, 1스쿱 0.6L</span>
             <span className="diy__hint">한 봉 약 3kg (상토 기준) · 비율은 부피 기준</span>
           </div>
-          <div className="material-grid">
+          <div id="diy-material-list" className="material-grid">
             {MATERIALS.map((m) => {
               const n = cnt[m.id]
               const on = n > 0
@@ -100,7 +178,7 @@ function SoilMixer() {
         </div>
 
         {/* 오른쪽: 흙 봉투 · 스쿱 · 결과 (SoilMeter) */}
-        <div className="soil-meter">
+        <div ref={meterRef} className="soil-meter">
           <div className="soil-meter__bag-wrap">
             <div className="soil-meter__bag-box">
               <div role="img" aria-label={potLabel} className="soil-bag">

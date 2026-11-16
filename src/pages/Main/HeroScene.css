@@ -147,3 +147,47 @@
   background: radial-gradient(closest-side, rgba(255,255,255,0.5), rgba(255,255,255,0));
   pointer-events: none;
 }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .hero-copy__title { font-size: 38px; }
+  .hero-copy__desc--lg { font-size: 18px; }
+}
+
+@media (max-width: 768px) {
+  .hero-stage {
+    min-height: 560px;
+  }
+
+  .hero-copy__title { font-size: 30px; }
+
+  .hero-copy__desc,
+  .hero-copy__desc--lg {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .hero-copy__btn {
+    margin-top: 32px;
+  }
+
+  /* 글 뒤 흰 타원을 조금 더 넓고 진하게 — 좁은 화면에서는 글이 식물 위에 더 많이 겹침 */
+  .hero-copy__group--veil::before {
+    width: 120vw;
+    height: 60vh;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.65), rgba(255,255,255,0));
+  }
+}
+
+/* 아주 좁은 화면: 설명 문구의 줄바꿈(<br>)을 풀어 자연스럽게 줄바꿈 */
+@media (max-width: 480px) {
+  .hero-copy__desc br {
+    display: none;
+  }
+
+  .hero-copy__btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}

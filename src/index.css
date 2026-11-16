@@ -150,6 +150,41 @@ img[src*="bug-fungus-gnat"] {
   white-space: nowrap;
 }
 
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .display-hero { font-size: 48px; }
+  .display-1 { font-size: 38px; }
+  .display-2 { font-size: 28px; }
+
+  /* 문구 + 버튼: 위아래로 쌓고 가운데 정렬 */
+  .cta-row {
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .cta-row__text { font-size: 22px; }
+}
+
+@media (max-width: 768px) {
+  .display-hero { font-size: 36px; }
+  .display-1 { font-size: 30px; }
+  .display-2 { font-size: 24px; }
+  .display-3 { font-size: 22px; }
+
+  .cta-row__text { font-size: 19px; }
+
+  /* 터치 기기에서는 카드가 떠오르지 않게 */
+  .card-hover:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .display-hero { font-size: 30px; }
+  .display-1 { font-size: 26px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .fade-in { animation: none; }
