@@ -108,13 +108,31 @@
   pointer-events: auto;
 }
 
+/* 히어로 · 장면 ① · ② 제목: 흰 외곽선 (선을 글자 뒤에 그려 글자 굵기는 그대로) */
+.hero-copy .display-hero,
+.hero-copy__title {
+  -webkit-text-stroke: 6px #FFFFFF;
+  paint-order: stroke fill;
+}
+
+@media (max-width: 768px) {
+  .hero-copy .display-hero,
+  .hero-copy__title { -webkit-text-stroke-width: 4px; }
+}
+
 /* 제목 → 설명 24px, 설명 → 버튼 40px */
 .hero-copy__desc {
   margin-top: 24px;
   font-size: 18px;
   line-height: 1.75;
   color: var(--ink-soft);
-  text-shadow: 0 0 12px rgba(255,255,255,0.9);
+  /* 흰 네온처럼 번지는 외곽 빛 (가까운 선명한 빛 + 멀리 퍼지는 흐린 빛) */
+  text-shadow:
+    0 0 2px #FFFFFF,
+    0 0 4px #FFFFFF,
+    0 0 8px #FFFFFF,
+    0 0 14px rgba(255, 255, 255, 0.9),
+    0 0 24px rgba(255, 255, 255, 0.7);
 }
 
 .hero-copy__desc--lg {
