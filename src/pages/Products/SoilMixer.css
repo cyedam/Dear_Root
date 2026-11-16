@@ -786,34 +786,64 @@
 }
 
 /* ===== 데스크탑 한 화면 맞춤 (높이 1100px 이하) =====
- * 재료 카드 두 줄과 흙 봉투 · 결과가 스크롤 없이 한 화면에 들어오도록
- * 화면 높이에 맞춰 재료 카드 크기를 정하고, 흙 봉투 영역을 줄임
+ * 재료 카드를 가로형(이미지 왼쪽 · 이름 · 설명 · 수량 오른쪽) 2열로 바꿔 폭을 채우고
+ * 재료 네 줄과 흙 봉투 · 결과가 스크롤 없이 한 화면에 들어오도록 이미지 크기를 화면 높이에 맞춤
  */
 @media (min-width: 1101px) and (max-height: 1100px) {
   .diy {
-    --mat-media: clamp(96px, 50vh - 330px, 240px);
+    --mat-media: clamp(72px, 25vh - 135px, 140px);
     gap: 28px;
     padding-top: 56px;
   }
 
-  /* 제목 · 재료 · 흙 봉투를 한 덩어리로 가운데 정렬 (재료 4열 + 간격 48 + 흙 봉투 400) */
-  .diy > * {
-    width: min(100%, calc(4 * (var(--mat-media) + 32px) + 3 * 20px + 48px + 400px));
-    margin-inline: auto;
-  }
-
   .material-grid {
-    grid-template-columns: repeat(4, minmax(0, calc(var(--mat-media) + 32px)));
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
   }
 
+  .material-card {
+    display: grid;
+    grid-template-columns: var(--mat-media) minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto auto 1fr;
+    column-gap: 16px;
+    row-gap: 4px;
+    padding: 12px;
+  }
+
+  /* 안쪽 묶음을 풀어 이미지 · 이름 · 설명을 카드 칸에 바로 배치 */
   .material-card__info {
-    gap: 8px;
-    padding: 16px 16px 10px;
+    display: contents;
+  }
+
+  .material-card__media {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    width: var(--mat-media);
+  }
+
+  .material-card__name {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .material-card__desc {
+    grid-column: 2;
+    grid-row: 3;
     min-height: 0;
+  }
+
+  .material-card__stepper {
+    grid-column: 2;
+    grid-row: 4;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 6px;
+    padding: 0;
+  }
+
+  .material-card__count {
+    min-width: 52px;
+    text-align: center;
   }
 
   .soil-meter {
