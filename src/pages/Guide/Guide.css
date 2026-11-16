@@ -154,15 +154,21 @@
   gap: 32px;
 }
 
-/* 벌레 7종 — 2단 */
-.bug-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* 벌레 7종 — 2단. 왼쪽 · 오른쪽 줄을 따로 쌓아서 펼친 카드가 있는 줄만 길어짐 (답변 2026-11-16) */
+.bug-cols {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   align-items: start;
+}
+
+.bug-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .bug-item {
@@ -363,9 +369,15 @@
     max-width: 560px;
   }
 
-  .bug-list {
-    grid-template-columns: minmax(0, 1fr);
+  /* 한 줄: 두 목록을 풀어 원래 순서(1 → 7)대로 */
+  .bug-cols {
+    display: flex;
+    flex-direction: column;
     gap: 16px;
+  }
+
+  .bug-list {
+    display: contents;
   }
 }
 

@@ -206,11 +206,18 @@ img[src*="bug-fungus-gnat"] {
   .card-hover { transition: none; }
 }
 
-/* 몬스테라 커서 끄기 버튼 (왼쪽 아래, puffy-web-cursor.js가 만듦) (답변 2026-11-16)
-   - 맞춤 케어 체험 질문 중에는 아래 고정 막대('이전 질문')와 겹치지 않게 막대 위로 올림
+/* 몬스테라 커서 끄기 버튼 (오른쪽 아래, puffy-web-cursor.js가 만듦) (답변 2026-11-16)
+   - 맞춤 케어 체험 질문 중에는 아래 고정 막대('다음')와 겹치지 않게 막대 위로 올림
+   - 케어 제품 DIY 재료 목록이 화면 아래 시트로 올라와 있는 동안(1100px 이하)은 숨김
    - 메인 월페이퍼 모드에서는 숨김 (커서는 그대로 따라다님) */
 body:has(.quiz-nav) .puffy-cursor-toggle {
   bottom: 92px !important;
+}
+
+@media (max-width: 1100px) {
+  body:has(.diy__materials.is-visible) .puffy-cursor-toggle {
+    display: none !important;
+  }
 }
 
 body.hero-wall .puffy-cursor-toggle {

@@ -312,6 +312,12 @@ body.hero-wall .scroll-top__btn {
   visibility: hidden;
 }
 
+/* 월페이퍼 중에는 따라다니는 몬스테라 잎 커서도 숨김 (커서 켜기 · 끄기 설정은 그대로, 돌아오면 다시 보임) (답변 2026-11-16)
+   puffy-web-cursor.js가 body 바로 아래에 만드는 그림 */
+body.hero-wall > img[aria-hidden='true'] {
+  visibility: hidden !important;
+}
+
 .hero-tools {
   position: absolute;
   right: 24px;

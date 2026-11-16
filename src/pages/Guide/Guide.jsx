@@ -64,12 +64,12 @@ function CareTopic({ topic }) {
 }
 
 // P4-S5 벌레 한 종 — 심할 때 · 예방은 펼쳐서 보기
-function BugItem({ bug }) {
+function BugItem({ bug, order }) {
   const [open, setOpen] = useState(false)
   const panelId = `bug-${bug.name}`
 
   return (
-    <li className="bug-item">
+    <li className="bug-item" style={{ order }}>
       <div className="bug-item__media">
         <img src={bug.image} alt="" />
       </div>
@@ -191,11 +191,16 @@ function Guide() {
             식물을 키우다 보면 벌레가 찾아오는 건 자연스러운 일이에요. 조금만 관리해 주면 더 건강하게 자랄 거예요.
           </p>
         </div>
-        <ul className="bug-list">
-          {BUGS.map((bug) => (
-            <BugItem key={bug.name} bug={bug} />
+        {/* 왼쪽 · 오른쪽 두 줄을 따로 쌓음 → 펼친 카드가 있는 줄만 내려감 (답변 2026-11-16). 한 줄 화면에서는 원래 순서대로 */}
+        <div className="bug-cols">
+          {[0, 1].map((col) => (
+            <ul key={col} className="bug-list">
+              {BUGS.map((bug, i) =>
+                i % 2 === col ? <BugItem key={bug.name} bug={bug} order={i} /> : null,
+              )}
+            </ul>
           ))}
-        </ul>
+        </div>
       </section>
 
       {/* P4-S6 궁금한 점 Q&A */}
