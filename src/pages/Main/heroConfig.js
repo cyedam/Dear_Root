@@ -71,6 +71,10 @@ export const FILL_SPOTS = [
   { x: 0.8, tip: 0.3, kinds: ['dracaena'], layer: 'mid', spread: 0.035, step: 0.1 }, // 오른쪽 빈자리 (15번)
   { x: 0.11, tip: 0.14, kinds: ['papyrus'], layer: 'mid', spread: 0.035, step: 0.08 }, // 왼쪽 위 빈자리 (19번)
   { x: 0.86, tip: 0.12, kinds: ['monsteraAlbo'], layer: 'mid', spread: 0.035, step: 0.08 }, // 오른쪽 위 빈자리 (13번)
+  // 몬스테라 알보를 오른쪽 뒤에만 두지 않고 여러 곳에 (답변 2026-11-16)
+  { x: 0.03, tip: 0.24, kinds: ['monsteraAlbo'], layer: 'mid', spread: 0.035, step: 0.08 }, // 왼쪽 끝
+  { x: 0.21, tip: 0.5, kinds: ['monsteraAlbo'], layer: 'back', spread: 0.035, step: 0.08 }, // 왼쪽 가운데 (옅게)
+  { x: 0.7, tip: 0.46, kinds: ['monsteraAlbo'], layer: 'back', spread: 0.035, step: 0.08 }, // 오른쪽 가운데 (옅게)
 ]
 
 // ── 3. 맨 뒤 정지된 흐릿한 숲 ─────────────────
