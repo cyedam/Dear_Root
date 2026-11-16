@@ -836,6 +836,19 @@
   }
 }
 
+/* 휴대폰: GNB가 위에 고정돼 있어 시트를 조금 낮춤 → 구매 버튼까지 시트 위에 보임 */
+@media (max-width: 768px) {
+  .diy {
+    padding-bottom: calc(32vh + 32px);
+    padding-bottom: calc(32svh + 32px);
+  }
+
+  .diy__materials {
+    max-height: 32vh;
+    max-height: 32svh;
+  }
+}
+
 @media (max-width: 1100px) and (prefers-reduced-motion: reduce) {
   .diy__materials,
   .diy__sheet-chevron { transition: none; }

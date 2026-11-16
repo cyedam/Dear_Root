@@ -61,10 +61,13 @@ function SoilMixer() {
     if (alignedRef.current) return
     if (!window.matchMedia(SHEET_QUERY).matches || !headRef.current) return
     alignedRef.current = true
+    // 화면 위에 고정된 GNB 바로 아래로 맞춤
+    const gnb = document.querySelector('.gnb')
+    const offset = (gnb ? gnb.getBoundingClientRect().bottom : 0) + 12
     const top = headRef.current.getBoundingClientRect().top
-    if (Math.abs(top - 12) > 24) {
+    if (Math.abs(top - offset) > 24) {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      window.scrollBy({ top: top - 12, behavior: reduce ? 'auto' : 'smooth' })
+      window.scrollBy({ top: top - offset, behavior: reduce ? 'auto' : 'smooth' })
     }
   }
 

@@ -1,6 +1,18 @@
+/* GNB 위쪽 여백 (답변 2026-11-16) — 전체 높이 = 위 여백 + --nav-height */
+:root {
+  --nav-pad-top: 16px;
+}
+
+/* GNB가 화면 위에 붙어 있으므로 #주소 이동 때 GNB 아래로 맞춤 */
+html {
+  scroll-padding-top: calc(var(--nav-height) + var(--nav-pad-top));
+}
+
+/* 모든 페이지 · 화면 크기에서 화면 위에 고정 */
 .gnb {
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 30;
   background: var(--white);
   border-bottom: 1px solid var(--line);
 }
@@ -28,8 +40,11 @@
 }
 
 .gnb__inner {
+  box-sizing: content-box;
   height: var(--nav-height);
-  padding: 0 var(--page-gutter);
+  padding-top: var(--nav-pad-top);
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
   display: grid;
   grid-template-columns: 220px 1fr 220px;
   align-items: center;
@@ -92,8 +107,9 @@
 
 /* 768px 이하: 로고 + 메뉴 버튼, 메뉴는 아래로 펼침 */
 @media (max-width: 768px) {
-  .gnb {
+  :root {
     --nav-height: 64px;
+    --nav-pad-top: 8px;
   }
 
   .gnb__inner {

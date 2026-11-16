@@ -3,6 +3,8 @@
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
 @font-face { font-family: 'Pretendard'; src: url('../fonts/Pretendard-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+/* 태나다체 (OFL 1.1, 투게더그룹) — 사이트 전체 제목 (답변 2026-11-16) */
+@font-face { font-family: 'Tenada'; src: url('../fonts/Tenada.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Outfit'; src: url('../fonts/Outfit-SemiBold-latin.woff2') format('woff2'); font-weight: 600; font-display: swap; }
 
 :root {
@@ -78,7 +80,9 @@
 
   --ease-out: cubic-bezier(.2,.8,.2,1);
 
-  --font-display: 'SchoolSafeVaultingBox', 'Pretendard', sans-serif;
+  /* 제목 글꼴: 사이트 전체 태나다체 (답변 2026-11-16, 이전: 학교안심 뜀틀) */
+  --font-display: 'Tenada', 'Pretendard', sans-serif;
+  --font-hero: var(--font-display);
   --font-sans: 'Pretendard', system-ui, sans-serif;
   --font-logo: 'Outfit', sans-serif;
 }
