@@ -47,9 +47,12 @@
   box-shadow: var(--shadow-cta);
 }
 
-.btn--primary:hover:not(:disabled) {
-  background: var(--leaf-green-hover);
-  color: var(--white);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .btn--primary:hover:not(:disabled) {
+    background: var(--leaf-green-hover);
+    color: var(--white);
+  }
 }
 
 /* 보조 버튼 */
@@ -60,9 +63,12 @@
   font-size: 16px;
 }
 
-.btn--secondary:hover:not(:disabled) {
-  background: var(--pale-lime);
-  color: var(--leaf-green);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .btn--secondary:hover:not(:disabled) {
+    background: var(--pale-lime);
+    color: var(--leaf-green);
+  }
 }
 
 /* 장면 위 버튼 */
@@ -78,10 +84,13 @@
   color: var(--leaf-green);
 }
 
-.btn--scene:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-scene-hover);
-  color: var(--ink);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .btn--scene:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-scene-hover);
+    color: var(--ink);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

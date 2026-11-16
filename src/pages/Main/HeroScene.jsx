@@ -36,12 +36,19 @@ function HeroScene() {
   // 햇빛 장면에 들어올 때마다 빛이 새로 퍼지도록 SideRays를 다시 그림
   const [raysKey, setRaysKey] = useState(0)
   const [showRays, setShowRays] = useState(false)
+  // 터치 기기(휴대폰 · 태블릿): 빛줄기는 멈춘 그림으로 (배터리 · 발열 줄임)
+  const [isTouch] = useState(() => window.matchMedia('(pointer: coarse)').matches)
+  // 마우스 · 트랙패드가 하나라도 연결돼 있으면 마우스 효과를 켬 (태블릿 + 트랙패드 포함)
+  const [hasMouse] = useState(() => window.matchMedia('(any-pointer: fine)').matches)
 
   useEffect(() => {
     const track = trackRef.current
     const stage = stageRef.current
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const touch = window.matchMedia('(pointer: coarse)').matches
+    const hasFine = window.matchMedia('(any-pointer: fine)').matches
+    // 장면 하나당 스크롤 길이 — 터치 기기는 화면 높이의 절반으로 짧게 (HeroScene.css의 .hero-track 높이와 맞춤)
+    const STEP = touch ? 0.5 : 1
 
     const windX = new Float32Array(GX * GY)
     const windY = new Float32Array(GX * GY)
@@ -107,8 +114,11 @@ function HeroScene() {
     const onLeave = () => {
       mouse.in = false
     }
-    window.addEventListener('pointermove', onMove, { passive: true })
-    document.documentElement.addEventListener('pointerleave', onLeave)
+    // 마우스 전용 — 마우스 · 트랙패드가 없으면 마우스 위치를 듣지 않음 (바람 효과 없음)
+    if (hasFine) {
+      window.addEventListener('pointermove', onMove, { passive: true })
+      document.documentElement.addEventListener('pointerleave', onLeave)
+    }
 
     const paintWind = (amount) => {
       p0.x += (mouse.x - p0.x) * 0.12
@@ -163,7 +173,7 @@ function HeroScene() {
     let progS = 0
     const readScroll = () => {
       const top = track.getBoundingClientRect().top
-      prog = Math.max(0, Math.min(2, -top / window.innerHeight))
+      prog = Math.max(0, Math.min(2, -top / (window.innerHeight * STEP)))
     }
     readScroll()
     progS = prog
@@ -178,6 +188,8 @@ function HeroScene() {
       const y = window.scrollY
       if (y !== lastY) dir = Math.sign(y - lastY)
       lastY = y
+      // 터치 기기에서는 장면 자동 맞춤을 하지 않음 — 손을 뗀 뒤 이어지는 관성 스크롤과 부딪힘
+      if (touch) return
       clearTimeout(snapTimer)
       if (snapping) return
       snapTimer = setTimeout(() => {
@@ -203,8 +215,15 @@ function HeroScene() {
 
     let inSun = false
     let raf = 0
+    let lastDraw = 0
     const t0 = performance.now()
     const frame = (now) => {
+      // 터치 기기: 스크롤이 멈춰 있을 때는 초당 20번만 그림 (배터리 · 발열 줄임)
+      if (touch && Math.abs(prog - progS) < 0.0005 && now - lastDraw < 50) {
+        raf = requestAnimationFrame(frame)
+        return
+      }
+      lastDraw = now
       const time = (now - t0) / 1000
       progS += (prog - progS) * (reduce ? 1 : 0.12)
       const s1 = ease(progS)
@@ -220,13 +239,14 @@ function HeroScene() {
       }
 
       const off = -SHIFT * s1 + 2 * SHIFT * s2
-      const windAmount = reduce || touch ? 0 : Math.max(0, 1 - progS * 1.6)
+      const windAmount = reduce || !hasFine ? 0 : Math.max(0, 1 - progS * 1.6)
       paintWind(windAmount)
 
       // 식물: 잎 끝의 바람만큼 휘었다가 돌아옴 + 잔잔한 흔들림
       for (const p of plants) {
         const w = sample(p.x, p.baseY - p.h + off) * p.layer.gain
-        const idle = reduce ? 0 : Math.sin(time * 1.6 + p.phase + p.x * 0.004) * 0.025 * (1 - 0.5 * s1)
+        // 잔잔한 흔들림 — 터치 기기에서는 폭을 40%로 줄임
+        const idle = reduce ? 0 : Math.sin(time * 1.6 + p.phase + p.x * 0.004) * 0.025 * (touch ? 0.4 : 1) * (1 - 0.5 * s1)
         const target = Math.max(-0.32, Math.min(0.32, w * 0.32)) + idle
         p.vel += (target - p.bend) * p.layer.lag * 1.4
         p.vel *= 0.78
@@ -326,14 +346,14 @@ function HeroScene() {
               blend={SUN.rayBlend}
               lightMode={SUN.rayLightMode}
               origin="top-right"
-              speed={2.5}
+              speed={isTouch ? 0 : 2.5}
               intensity={SUN.rayIntensity}
               glow={SUN.rayGlow}
               saturation={SUN.raySaturation}
               spread={2}
               density={SUN.rayDensity}
               opacity={SUN.rayOpacity}
-              followMouse={true}
+              followMouse={hasMouse}
             />
           )}
         </div>

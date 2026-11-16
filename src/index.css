@@ -28,8 +28,11 @@ a {
   color: var(--leaf-green);
 }
 
-a:hover {
-  color: var(--leaf-green-deep);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  a:hover {
+    color: var(--leaf-green-deep);
+  }
 }
 
 button {
@@ -60,9 +63,12 @@ h1, h2, h3, p {
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
 }
 
 /* 등장 애니메이션 (디자인 .dr-in) */
@@ -173,11 +179,6 @@ img[src*="bug-fungus-gnat"] {
   .display-3 { font-size: 22px; }
 
   .cta-row__text { font-size: 19px; }
-
-  /* 터치 기기에서는 카드가 떠오르지 않게 */
-  .card-hover:hover {
-    transform: none;
-  }
 }
 
 @media (max-width: 480px) {

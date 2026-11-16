@@ -54,9 +54,15 @@
   transition: color .2s;
 }
 
-.gnb__link:hover,
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
 .gnb__link.is-active {
   color: var(--leaf-green);
+}
+
+@media (any-hover: hover) {
+  .gnb__link:hover {
+    color: var(--leaf-green);
+  }
 }
 
 .gnb__link.is-active {
@@ -125,6 +131,7 @@
     top: 100%;
     left: 0;
     right: 0;
+    justify-self: stretch;
     display: none;
     flex-direction: column;
     align-items: stretch;

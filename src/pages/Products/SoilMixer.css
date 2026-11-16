@@ -484,8 +484,8 @@
 @media (max-width: 1100px) {
   /* 시트에 가려지지 않게 섹션 아래를 비워 둠 */
   .diy {
-    padding-bottom: calc(45vh + 32px);
-    padding-bottom: calc(45svh + 32px);
+    padding-bottom: calc(38vh + 32px);
+    padding-bottom: calc(38svh + 32px);
   }
 
   .diy.is-sheet-closed {
@@ -499,8 +499,8 @@
     bottom: 0;
     z-index: 25;
     max-width: 720px;
-    max-height: 45vh;
-    max-height: 45svh;
+    max-height: 38vh;
+    max-height: 38svh;
     margin: 0 auto;
     padding: 0 var(--page-gutter) env(safe-area-inset-bottom);
     gap: 0;
@@ -780,16 +780,59 @@
   }
 }
 
+/* 휴대폰: 제목 · 설명 · 흙 봉투 · 결과가 시트 위 한 화면에 들어오도록 더 줄임 */
+@media (max-width: 768px) {
+  .diy {
+    gap: 16px;
+  }
+
+  .diy__head {
+    gap: 8px;
+  }
+
+  .diy__sub {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .soil-meter {
+    padding: 16px;
+    row-gap: 12px;
+    column-gap: 16px;
+  }
+
+  .soil-meter__bag-wrap {
+    zoom: 0.5;
+  }
+
+  .soil-meter__liters {
+    display: none;
+  }
+
+  .soil-meter__gauge,
+  .soil-meter__bars {
+    gap: 6px;
+  }
+
+  .soil-meter__result .display-3 {
+    font-size: 19px;
+  }
+
+  .soil-meter__result-desc {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 1100px) and (prefers-reduced-motion: reduce) {
   .diy__materials,
   .diy__sheet-chevron { transition: none; }
 }
 
-/* ===== 데스크탑 한 화면 맞춤 (높이 1100px 이하) =====
+/* ===== 데스크탑 한 화면 맞춤 =====
  * 재료 카드를 가로형(이미지 왼쪽 · 이름 · 설명 · 수량 오른쪽) 2열로 바꿔 폭을 채우고
  * 재료 네 줄과 흙 봉투 · 결과가 스크롤 없이 한 화면에 들어오도록 이미지 크기를 화면 높이에 맞춤
  */
-@media (min-width: 1101px) and (max-height: 1100px) {
+@media (min-width: 1101px) {
   .diy {
     --mat-media: clamp(72px, 25vh - 135px, 140px);
     gap: 28px;

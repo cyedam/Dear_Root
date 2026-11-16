@@ -180,14 +180,17 @@
   }
 }
 
-/* 아주 좁은 화면: 설명 문구의 줄바꿈(<br>)을 풀어 자연스럽게 줄바꿈 */
 @media (max-width: 480px) {
-  .hero-copy__desc br {
-    display: none;
-  }
-
   .hero-copy__btn {
     width: 100%;
     max-width: 280px;
+  }
+}
+
+/* 터치 기기(휴대폰 · 태블릿): 장면 하나당 스크롤을 화면 높이의 절반으로 줄임 (300vh → 200vh)
+ * HeroScene.jsx의 STEP 값과 맞춤 */
+@media (pointer: coarse) {
+  .hero-track {
+    height: 200vh;
   }
 }

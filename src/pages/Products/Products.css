@@ -47,8 +47,11 @@
 }
 
 /* 세트 · 개별 상품 hover: 그림자를 조금 더 진하게 */
-.product-card.card-hover:hover {
-  box-shadow: 0 12px 28px rgba(31,42,34,0.16);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .product-card.card-hover:hover {
+    box-shadow: 0 12px 28px rgba(31,42,34,0.16);
+  }
 }
 
 .product-card__media {
@@ -153,11 +156,6 @@
     font-size: 16px;
   }
 
-  .item-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
   .product-card {
     padding: 16px;
     gap: 8px;
@@ -184,5 +182,10 @@
 @media (max-width: 600px) {
   .set-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .item-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 }

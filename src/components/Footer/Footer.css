@@ -41,8 +41,11 @@
   transition: color .2s;
 }
 
-.footer__link:hover {
-  color: var(--leaf-green);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .footer__link:hover {
+    color: var(--leaf-green);
+  }
 }
 
 .footer__bottom {

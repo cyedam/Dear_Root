@@ -65,8 +65,8 @@ function CareTest() {
       id="test"
       aria-label="맞춤 케어 체험 질문"
       className={`section quiz${q.opts.length > 8 ? ' quiz--dense' : ''}`}
-      // 데스크탑: 카드가 두 줄 안에 들어가도록 열 수를 정함 (최소 4열)
-      style={{ '--cols': Math.max(4, Math.ceil(q.opts.length / 2)) }}
+      // 데스크탑 열 수: 4장 이하는 장 수만큼, 8장 이하는 4열, 그보다 많으면 5열
+      style={{ '--cols': q.opts.length <= 4 ? q.opts.length : q.opts.length <= 8 ? 4 : 5 }}
     >
       {/* P2-S1 진행 표시 */}
       <div className="quiz-progress">

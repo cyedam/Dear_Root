@@ -31,6 +31,9 @@ function SoilMixer() {
   // 바텀시트 (좁은 화면)
   const sectionRef = useRef(null)
   const meterRef = useRef(null)
+  const headRef = useRef(null)
+  // 자동 맞춤은 처음 담을 때 한 번만
+  const alignedRef = useRef(false)
   const [sheetOpen, setSheetOpen] = useState(true)
   const [sheetVisible, setSheetVisible] = useState(false)
 
@@ -52,11 +55,14 @@ function SoilMixer() {
     }
   }, [])
 
-  // 바텀시트에서 재료를 담으면 흙 봉투 · 결과가 화면 위쪽에 보이도록 맞춤
+  // 바텀시트에서 처음 재료를 담을 때 '나만의 흙 만들기' 제목부터 흙 봉투 · 결과까지 시트 위에 보이도록 한 번 맞춤
+  // (이후에는 사용자가 스크롤한 위치를 그대로 둠)
   const showMeter = () => {
-    if (!window.matchMedia(SHEET_QUERY).matches || !meterRef.current) return
-    const top = meterRef.current.getBoundingClientRect().top
-    if (top < 0 || top > 40) {
+    if (alignedRef.current) return
+    if (!window.matchMedia(SHEET_QUERY).matches || !headRef.current) return
+    alignedRef.current = true
+    const top = headRef.current.getBoundingClientRect().top
+    if (Math.abs(top - 12) > 24) {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       window.scrollBy({ top: top - 12, behavior: reduce ? 'auto' : 'smooth' })
     }
@@ -89,7 +95,7 @@ function SoilMixer() {
       aria-label="나만의 흙 만들기"
       className={`section diy${sheetOpen ? '' : ' is-sheet-closed'}`}
     >
-      <div className="diy__head">
+      <div ref={headRef} className="diy__head">
         <h1 className="display-1">나만의 흙 만들기</h1>
         <p className="diy__sub">재료를 한 스쿱씩 담아 보세요. 담을 때마다 이 흙이 어떤 식물에 잘 맞는지 바로 알려 드려요.</p>
       </div>

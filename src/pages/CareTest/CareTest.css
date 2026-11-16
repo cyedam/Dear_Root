@@ -206,12 +206,18 @@
   box-shadow: var(--shadow-cta);
 }
 
-.quiz-nav__btn--prev:hover:not(:disabled) .quiz-nav__circle {
-  background: var(--pale-lime);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .quiz-nav__btn--prev:hover:not(:disabled) .quiz-nav__circle {
+    background: var(--pale-lime);
+  }
 }
 
-.quiz-nav__btn--next:hover:not(:disabled) .quiz-nav__circle {
-  background: var(--leaf-green-hover);
+/* 마우스 올림 효과 — 마우스 · 트랙패드가 연결된 기기에서만 (터치 기기에서는 누른 뒤 남지 않게) */
+@media (any-hover: hover) {
+  .quiz-nav__btn--next:hover:not(:disabled) .quiz-nav__circle {
+    background: var(--leaf-green-hover);
+  }
 }
 
 .quiz-nav__btn:active:not(:disabled) .quiz-nav__circle {
@@ -662,25 +668,14 @@
 }
 
 /* ===== 데스크탑 한 화면 맞춤 =====
- * 질문 · 카드가 스크롤 없이 한 화면에 들어오도록
- * 화면 높이에 맞춰 카드 크기를 정하고, 카드가 많으면 열을 늘려 두 줄로 맞춤
+ * 카드를 가로형(이미지 왼쪽 · 글 오른쪽)으로 바꿔 내용 폭을 꽉 채우고
+ * 질문 · 카드가 스크롤 없이 한 화면에 들어오도록 이미지 크기를 화면 높이에 맞춤
  */
 @media (min-width: 1025px) {
   .quiz {
-    --card-media: clamp(110px, 50vh - 340px, 260px);
-    --grid-gap: 24px;
+    --card-media: clamp(80px, 50vh - 300px, 180px);
     gap: 32px;
     padding-top: 56px;
-  }
-
-  .quiz--dense {
-    --grid-gap: 16px;
-  }
-
-  /* 진행 표시 · 제목 · 카드를 카드 묶음 폭에 맞춰 가운데 정렬 */
-  .quiz > * {
-    width: min(100%, calc(var(--cols) * (var(--card-media) + 40px) + (var(--cols) - 1) * var(--grid-gap)));
-    margin-inline: auto;
   }
 
   .quiz-question {
@@ -688,22 +683,55 @@
   }
 
   .choice-grid {
-    grid-template-columns: repeat(var(--cols, 4), minmax(0, calc(var(--card-media) + 40px)));
-    gap: var(--grid-gap);
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
   }
 
   .choice-card {
-    gap: 10px;
-    padding: 20px;
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: 16px;
+    row-gap: 6px;
+    padding: 16px;
   }
 
-  /* 카드가 많은 질문 (증상 등): 글자를 조금 줄임 */
+  /* 이미지: 카드 폭의 45%까지, 화면 높이에 맞춘 크기를 넘지 않게 */
+  .choice-card__media {
+    grid-row: 1 / -1;
+    width: min(var(--card-media), 45cqi);
+  }
+
+  .choice-card__name {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .choice-card__desc {
+    grid-column: 2;
+    grid-row: 3;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* 이름만 있는 카드는 이름을 세로 가운데에 */
+  .choice-card__name:last-child {
+    grid-row: 2 / 4;
+  }
+
+  /* 카드가 많은 질문 (증상 등) */
+  .choice-grid--dense {
+    gap: 16px;
+  }
+
   .choice-grid--dense .choice-card {
-    padding: 14px;
+    column-gap: 12px;
+    padding: 12px;
   }
 
   .choice-grid--dense .choice-card__name {
     font-size: 15px;
-    line-height: 1.45;
   }
 }
