@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Button from '../../components/Button/Button.jsx'
 import { ROUTES } from '../../routes.js'
 import { formatPrice } from '../../data/products.js'
@@ -44,9 +45,7 @@ function CareTest() {
       next.symptom = ans.symptom.filter((x) => x !== 'budDrop')
     }
     setAns(next)
-    // 단일 선택은 바로 다음 질문으로
-    clearTimeout(timerRef.current)
-    timerRef.current = setTimeout(advance, 280)
+    // 단일 · 다중 선택 모두 '다음'을 눌러야 넘어감
   }
 
   const prev = () => {
@@ -54,11 +53,20 @@ function CareTest() {
     setQi((i) => Math.max(0, i - 1))
   }
 
-  if (view === 'result') {
-    return <Result ans={ans} />
+  // 결과 화면에서 '다시 하기' — 답을 모두 지우고 첫 질문으로
+  const restart = () => {
+    clearTimeout(timerRef.current)
+    setAns(INITIAL_ANSWERS)
+    setQi(0)
+    setView('quiz')
   }
 
-  const nextDisabled = q.multi && value.length === 0
+  if (view === 'result') {
+    return <Result ans={ans} onRestart={restart} />
+  }
+
+  // 답을 하나도 고르지 않으면 '다음' 비활성
+  const nextDisabled = q.multi ? value.length === 0 : value == null
 
   return (
     <section
@@ -134,7 +142,7 @@ function CareTest() {
       </div>
 
       {/* P2-S3 질문 이동 */}
-      {/* 화면 양옆에 고정: 왼쪽 이전 질문 · 오른쪽 다음 (다음은 다중 선택 질문에서만) */}
+      {/* 화면 양옆에 고정: 왼쪽 이전 질문 · 오른쪽 다음 (모든 질문) */}
       <nav aria-label="질문 이동" className="quiz-nav">
         <button
           type="button"
@@ -147,19 +155,17 @@ function CareTest() {
           </span>
           <span className="quiz-nav__label">이전 질문</span>
         </button>
-        {q.multi && (
-          <button
-            type="button"
-            className="quiz-nav__btn quiz-nav__btn--next"
-            disabled={nextDisabled}
-            onClick={() => !nextDisabled && advance()}
-          >
-            <span className="quiz-nav__circle">
-              <NavArrow direction="right" />
-            </span>
-            <span className="quiz-nav__label">다음</span>
-          </button>
-        )}
+        <button
+          type="button"
+          className="quiz-nav__btn quiz-nav__btn--next"
+          disabled={nextDisabled}
+          onClick={() => !nextDisabled && advance()}
+        >
+          <span className="quiz-nav__circle">
+            <NavArrow direction="right" />
+          </span>
+          <span className="quiz-nav__label">다음</span>
+        </button>
       </nav>
     </section>
   )
@@ -184,13 +190,24 @@ function NavArrow({ direction }) {
   )
 }
 
-function Result({ ans }) {
+function Result({ ans, onRestart }) {
   const r = getResult(ans)
 
   return (
     <>
       {/* P2-S4 결과 요약 */}
       <section aria-label="진단 결과" className="section section--tint">
+        {/* 다시 하기 — 결과 화면 왼쪽 위 */}
+        <Button
+          variant="secondary"
+          size="md"
+          icon="left"
+          iconPosition="start"
+          className="result-restart"
+          onClick={onRestart}
+        >
+          다시 하기
+        </Button>
         <div className="result-summary">
           <div className="result-summary__media fade-in fade-in-1">
             {r.primary.image && <img src={r.primary.image} alt="" />}
@@ -239,7 +256,16 @@ function Result({ ans }) {
           <h2 className="display-2">내 식물을 위한 추천 케어</h2>
           <div className="result-products__grid">
             {r.products.map((p) => (
-              <div key={p.name} className="rec-card card-hover">
+              <Link
+                key={p.name}
+                to={`${ROUTES.products}#items-${p.kind === '흙' ? 'soil' : 'nutri'}`}
+                className="rec-card card-hover"
+                aria-label={`${p.name} 케어 제품에서 보기`}
+              >
+                {/* 오른쪽 위 화살표: 카드를 누르면 케어 제품의 개별 상품(같은 탭)으로 이동 */}
+                <svg className="rec-card__arrow" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
                 <div className="rec-card__media">
                   <img src={p.image} alt="" />
                 </div>
@@ -249,16 +275,8 @@ function Result({ ans }) {
                   {p.desc && <p>{p.desc}</p>}
                   <span className="price">{formatPrice(p.price)}</span>
                 </div>
-              </div>
+              </Link>
             ))}
-          </div>
-          <div className="result-products__actions">
-            <Button variant="secondary" to={`${ROUTES.products}#diy`}>
-              DIY 흙 담기
-            </Button>
-            <Button variant="secondary" to={`${ROUTES.products}#sets`}>
-              제품 구매하기
-            </Button>
           </div>
         </section>
       )}
@@ -267,7 +285,7 @@ function Result({ ans }) {
       <section aria-label="다음 행동" className="section">
         <div className="cta-row">
           <p className="cta-row__text">물 주기와 분갈이 방법을 더 자세히 알고 싶다면</p>
-          <Button variant="secondary" to={ROUTES.guide} icon="right">
+          <Button variant="primary" to={ROUTES.guide} icon="right">
             케어 가이드 보기
           </Button>
         </div>

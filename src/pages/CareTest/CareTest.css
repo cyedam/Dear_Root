@@ -390,12 +390,40 @@
 }
 
 .rec-card {
+  position: relative;
   padding: 40px;
   border-radius: var(--radius-xl);
   background: var(--white);
   display: flex;
   align-items: center;
   gap: 32px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 오른쪽 위 화살표 (카드 전체가 링크) */
+.rec-card__arrow {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  color: var(--leaf-green);
+  transition: transform .2s ease;
+}
+
+.rec-card:active {
+  transform: scale(0.99);
+}
+
+.rec-card:focus-visible {
+  outline: 2px solid var(--leaf-green);
+  outline-offset: 3px;
+}
+
+@media (any-hover: hover) {
+  .rec-card:hover .rec-card__arrow {
+    transform: translateX(3px);
+  }
 }
 
 .rec-card__media {
@@ -430,11 +458,6 @@
   color: var(--ink-muted);
 }
 
-.result-products__actions {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-}
 
 /* ===== 반응형 ===== */
 @media (max-width: 1024px) {
@@ -625,6 +648,11 @@
     gap: 20px;
   }
 
+  .rec-card__arrow {
+    top: 16px;
+    right: 16px;
+  }
+
   .rec-card__media {
     flex-basis: 120px;
     height: 120px;
@@ -639,15 +667,15 @@
     line-height: 1.6;
   }
 
-  /* 구매 버튼 두 개: 위아래로, 가로 꽉 채움 */
-  .result-products__actions {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
 }
 
 @media (max-width: 480px) {
+  /* 사진이 위로 가면 화살표는 가격 줄 오른쪽 끝으로 */
+  .rec-card__arrow {
+    top: auto;
+    bottom: 20px;
+  }
+
   /* 추천 상품 카드: 사진 위 · 글 아래 */
   .rec-card {
     flex-direction: column;
@@ -732,6 +760,20 @@
   }
 
   .choice-grid--dense .choice-card__name {
+    font-size: 15px;
+  }
+}
+
+/* 결과 화면 왼쪽 위 '처음부터 다시 하기' */
+.result-restart {
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .result-restart {
+    margin-bottom: 24px;
+    height: 44px;
     font-size: 15px;
   }
 }

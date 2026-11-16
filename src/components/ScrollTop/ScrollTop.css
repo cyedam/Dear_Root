@@ -40,3 +40,8 @@
     padding: 32px var(--page-gutter);
   }
 }
+
+/* 맞춤 케어 체험 질문 중에는 '맨 위로' 버튼을 숨김 (결과 화면에서는 다시 보임) */
+body:has(.quiz) .scroll-top {
+  display: none;
+}

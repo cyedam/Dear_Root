@@ -138,7 +138,6 @@ function SoilMixer() {
           </button>
           <div className="diy__label-row">
             <span className="diy__label">재료 고르기 · 한 봉 6L, 1스쿱 0.6L</span>
-            <span className="diy__hint">한 봉 약 3kg (상토 기준) · 비율은 부피 기준</span>
           </div>
           <div id="diy-material-list" className="material-grid">
             {MATERIALS.map((m) => {
@@ -265,7 +264,7 @@ function SoilMixer() {
           </div>
 
           {/* P3-B3: 장바구니 · 결제는 [미정] — 지금은 버튼까지만 */}
-          <button type="button" className="btn btn--secondary btn--block" disabled={total === 0}>
+          <button type="button" className="btn btn--primary btn--block" disabled={total === 0}>
             이 배합으로 구매
           </button>
         </div>

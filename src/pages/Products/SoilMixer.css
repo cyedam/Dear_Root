@@ -303,14 +303,17 @@
 }
 
 .soil-meter__slots {
-  display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
+/* 스쿱 표시: 10칸을 작은 원으로 (짧게 차지해서 흙 봉투를 크게 둘 수 있음) */
 .soil-meter__slot {
-  height: 14px;
-  border-radius: var(--radius-xs);
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   background: var(--white);
   border: 1px solid var(--line-strong);
   transition: background-color .25s;
@@ -691,7 +694,7 @@
 
   .soil-meter__bag-wrap {
     grid-area: bag;
-    zoom: 0.6;
+    zoom: 0.8;
   }
 
   .soil-meter__bag-box {
@@ -734,10 +737,11 @@
   }
 
   .soil-meter__slots {
-    gap: 3px;
+    gap: 4px;
   }
 
   .soil-meter__slot {
+    width: 10px;
     height: 10px;
   }
 
@@ -802,11 +806,20 @@
   }
 
   .soil-meter__bag-wrap {
-    zoom: 0.5;
+    zoom: 0.7;
   }
 
   .soil-meter__liters {
     display: none;
+  }
+
+  .soil-meter__slots {
+    gap: 3px;
+  }
+
+  .soil-meter__slot {
+    width: 9px;
+    height: 9px;
   }
 
   .soil-meter__gauge,
@@ -828,29 +841,58 @@
   .diy__sheet-chevron { transition: none; }
 }
 
-/* ===== 데스크탑 한 화면 맞춤 =====
- * 재료 카드를 가로형(이미지 왼쪽 · 이름 · 설명 · 수량 오른쪽) 2열로 바꿔 폭을 채우고
- * 재료 네 줄과 흙 봉투 · 결과가 스크롤 없이 한 화면에 들어오도록 이미지 크기를 화면 높이에 맞춤
+/* ===== 데스크탑 한 화면 맞춤 (1101px 이상) =====
+ * 결과 칸: 왼쪽 흙 봉투 + 오른쪽 스쿱 수 · 다시 담기 · 스쿱 원 · 리터 · 결과 막대, 아래 결과 문구 · 구매 버튼
+ * 재료 카드: 가로형 2열 × 4줄로 작게. 결과 칸과 높이를 맞춰 아래 끝선을 같게 함
+ * 흙 봉투 배율(--bag-z)은 화면 크기에 따라 커짐
  */
 @media (min-width: 1101px) {
   .diy {
-    --mat-media: clamp(72px, 25vh - 135px, 140px);
+    --bag-z: 0.85;
     gap: 28px;
     padding-top: 56px;
   }
 
-  .material-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+  /* 아주 넓은 화면에서 카드가 늘어나지 않도록 DIY 영역은 최대 1440px */
+  .diy > * {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
   }
 
+  .diy__layout {
+    grid-template-columns: minmax(0, 1fr) clamp(480px, 42vw, 640px);
+    align-items: stretch;
+    gap: 40px;
+  }
+
+  .diy__label-row {
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+
+  /* 재료 카드: 결과 칸 높이에 맞춰 4줄을 고르게 */
+  .diy__materials {
+    min-height: 0;
+  }
+
+  .material-grid {
+    flex: 1 1 auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 12px;
+    container-type: inline-size;
+  }
+
+  /* 재료 이미지: 카드 높이(결과 칸 높이 ÷ 4)에 맞추되, 카드 폭이 좁으면 수량 버튼 자리만큼 줄임 */
   .material-card {
+    --mat-media: min(calc((300px * var(--bag-z) + 180px) / 4 - 34px), calc(50cqi - 170px));
     display: grid;
     grid-template-columns: var(--mat-media) minmax(0, 1fr);
     grid-template-rows: 1fr auto auto auto 1fr;
-    column-gap: 16px;
-    row-gap: 4px;
-    padding: 12px;
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 10px;
   }
 
   /* 안쪽 묶음을 풀어 이미지 · 이름 · 설명을 카드 칸에 바로 배치 */
@@ -861,49 +903,138 @@
   .material-card__media {
     grid-column: 1;
     grid-row: 1 / -1;
+    align-self: center;
     width: var(--mat-media);
   }
 
   .material-card__name {
     grid-column: 2;
     grid-row: 2;
+    font-size: 16px;
   }
 
   .material-card__desc {
     grid-column: 2;
     grid-row: 3;
     min-height: 0;
+    font-size: 13px;
   }
 
   .material-card__stepper {
     grid-column: 2;
     grid-row: 4;
     justify-content: flex-start;
-    gap: 12px;
-    margin-top: 6px;
+    gap: 6px;
+    margin-top: 4px;
     padding: 0;
   }
 
+  /* 좁은 카드에서도 수량 버튼이 찌그러지지 않게 */
+  .stepper-btn {
+    flex: none;
+  }
+
   .material-card__count {
-    min-width: 52px;
+    min-width: 44px;
     text-align: center;
+    font-size: 14px;
   }
 
+  /* 결과 칸 */
   .soil-meter {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto auto auto;
+    grid-template-areas:
+      'bag .'
+      'bag gauge'
+      'bag bars'
+      'result result'
+      'buy buy';
+    align-items: center;
+    column-gap: 28px;
+    row-gap: 18px;
     padding: 28px 32px;
-    gap: 18px;
   }
 
+  /* 흙 봉투와 옆 내용(스쿱 수 ~ 결과 막대)은 아래 끝선을 맞춤 */
   .soil-meter__bag-wrap {
-    zoom: 0.7;
+    grid-area: bag;
+    align-self: end;
+    zoom: var(--bag-z);
   }
 
-  .soil-meter__gauge,
-  .soil-meter__bars {
+  /* 오른쪽: 스쿱 수 · 다시 담기 · 스쿱 원 · 리터 · 결과 막대 */
+  .soil-meter__gauge {
+    grid-area: gauge;
     gap: 10px;
+  }
+
+  .soil-meter__gauge-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .soil-meter__count {
+    white-space: nowrap;
+  }
+
+  .soil-meter__reset {
+    width: auto;
+    height: 36px;
+    padding: 0 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .soil-meter__bars {
+    grid-area: bars;
+    gap: 10px;
+  }
+
+  .soil-meter__result {
+    grid-area: result;
   }
 
   .soil-meter__result .display-3 {
     font-size: 24px;
   }
+
+  .soil-meter > .btn--block {
+    grid-area: buy;
+    align-self: end;
+  }
+}
+
+/* 재료 칸이 넓으면 수량 조절을 카드 오른쪽 끝으로 (카드 안 빈 공간 없앰) */
+@container (min-width: 640px) {
+  .material-card {
+    grid-template-columns: var(--mat-media) minmax(0, 1fr) auto;
+  }
+
+  .material-card__stepper {
+    grid-column: 3;
+    grid-row: 1 / -1;
+    align-self: center;
+    margin-top: 0;
+    padding-right: 4px;
+  }
+}
+
+/* 넓고 높은 화면일수록 흙 봉투를 크게 */
+@media (min-width: 1280px) {
+  .diy { --bag-z: 0.95; }
+}
+
+@media (min-width: 1280px) and (min-height: 900px) {
+  .diy { --bag-z: 1.1; }
+}
+
+@media (min-width: 1280px) and (min-height: 1000px) {
+  .diy { --bag-z: 1.2; }
+}
+
+@media (min-width: 1280px) and (min-height: 1100px) {
+  .diy { --bag-z: 1.3; }
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import Button from '../../components/Button/Button.jsx'
 import { ROUTES } from '../../routes.js'
 import { NUTRIENTS, SETS, SOILS, formatPrice } from '../../data/products.js'
@@ -11,7 +12,9 @@ const TABS = [
 ]
 
 function Products() {
-  const [tab, setTab] = useState('soil')
+  // 체험 결과 카드에서 #items-soil · #items-nutri로 오면 그 탭으로 열림
+  const { hash } = useLocation()
+  const [tab, setTab] = useState(hash === '#items-nutri' ? 'nutri' : 'soil')
   const items = TABS.find((t) => t.id === tab).items
 
   return (
@@ -44,7 +47,7 @@ function Products() {
       </section>
 
       {/* P3-S3 개별 상품 */}
-      <section aria-label="개별 상품" className="section products-section products-section--single">
+      <section id={`items-${tab}`} aria-label="개별 상품" className="section products-section products-section--single">
         <h2 className="display-2">개별 상품</h2>
         <div role="tablist" aria-label="상품 종류" className="tabs">
           {TABS.map((t) => (
