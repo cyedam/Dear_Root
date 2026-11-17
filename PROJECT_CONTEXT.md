@@ -256,7 +256,23 @@
   - 프리텐다드: `Pretendard-Regular · Medium · SemiBold.woff2` (400 · 500 · 600)
   - 태나다체: `Tenada.woff2` (font-family 'Tenada', 눈누 npm 패키지 `@noonnu/tenada`에서 받음, 사이트 전체 제목)
   - Outfit SemiBold: `Outfit-SemiBold-latin.woff2` (로고용 영문, 600)
-- 파일 위치: 이미지는 `src/assets` (답변)
+- 파일 위치 (답변, 2026-11-17 정리): 사이트가 쓰는 파일만 `src/assets` · `public`에 두고, 원본 · 안 쓰는 파일은 `docs/assets`에 모아 둠
+
+| 위치 | 들어 있는 것 | 사이트에서 쓰는지 |
+| --- | --- | --- |
+| `src/assets/logo` | 로고 `dear-root-logo.svg` | 씀 — GNB · 푸터 (`components/Logo/Logo.jsx`) |
+| `src/assets/P1_hero` | `plants/` 식물 webp 22개 · `soil.webp` | 씀 — 메인 장면 (`pages/Main/heroField.js` · `HeroScene.jsx`) |
+| `src/assets/P2` | 질문 카드 · 결과 · 벌레 일러스트 52개 | 씀 — 맞춤 케어 체험 (`pages/CareTest/quizData.js`), 벌레 7개는 케어 가이드에서도 씀 (`pages/Guide/guideData.js`) |
+| `src/assets/P3` | 상품 · 세트 · DIY 재료 사진 `*-photo.jpg` 21개 | 씀 — 케어 제품 · 체험 추천 (`data/products.js` · `pages/Products/soilMix.js`) |
+| `src/assets/P4` | 물 주기 · 햇빛 · 분갈이 일러스트 3개 | 씀 — 케어 가이드 (`pages/Guide/guideData.js`) |
+| `public/favicon` | 파비콘 5개 | 씀 — `index.html` |
+| `public/cursor` | 몬스테라 커서 스크립트 · 그림 (터치 무시하도록 고친 버전) | 씀 — `index.html` |
+| `docs/assets/hero` | 메인 식물 원본 PNG 25개(01~22, 03 · 08 다른 버전 2개, 흙 단면) · 사이트용 webp 사본 · 일러스트 생성 프롬프트 CSV 2개 | 안 씀 (원본 보관) |
+| `docs/assets/logo` | 로고 svg · 투명 배경 PNG(폭 1200px) | 안 씀 (원본 보관) |
+| `docs/assets/P2` · `P3` · `P4` | 사이트용 이미지 사본 + P3 예전 버전(사진판이 아닌 jpg 7개) | 안 씀 (원본 보관) |
+| `docs/assets/cursor` | 몬스테라 커서 원본 | 안 씀 (원본 보관) |
+| `docs/assets/favicon-old` | 예전 파비콘 5개 | 안 씀 (보관) |
+| `docs/assets/unused-code` | 예전 P1 로딩 화면 `HeroLoader.jsx` · `.css` | 안 씀 (보관) |
 
 ## 7. 반응형 기준
 - 기준: 데스크탑 기준으로 만들고, 다른 화면 크기에서도 볼 수 있게 반응형 처리 (출처: 01)
