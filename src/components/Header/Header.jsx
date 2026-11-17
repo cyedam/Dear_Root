@@ -4,7 +4,7 @@ import Logo from '../Logo/Logo.jsx'
 import { NAV_ITEMS, ROUTES } from '../../routes.js'
 import './Header.css'
 
-// GNB-01 ~ GNB-04. 장바구니(GNB-05)는 [미정]이라 오른쪽 영역만 비워 둠
+// GNB-01 ~ GNB-05. 장바구니(GNB-05)는 오른쪽 위 아이콘만 둠 — 장바구니 · 결제 화면은 만들지 않아 누르면 동작 없음 (답변 2026-11-17)
 // overlay(메인): 화면 위에 고정. 히어로 장면 위에서는 투명, 히어로를 지나면 흰 바탕
 function Header({ overlay = false }) {
   const { pathname } = useLocation()
@@ -72,6 +72,13 @@ function Header({ overlay = false }) {
           ))}
         </div>
         <div className="gnb__end">
+          {/* GNB-05 장바구니 아이콘 (아이콘만, 동작 없음) */}
+          <button type="button" className="gnb__cart" aria-label="장바구니">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 8h14l-1.3 11.1a1 1 0 0 1-1 .9H7.3a1 1 0 0 1-1-.9L5 8z" />
+              <path d="M9 10V7a3 3 0 0 1 6 0v3" />
+            </svg>
+          </button>
           {/* 모바일 메뉴 버튼 — 데스크탑에서는 숨김 */}
           <button
             type="button"
